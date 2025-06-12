@@ -1,8 +1,8 @@
-// File: /home/medina/projects/mili-infra/mili-frontend/src/app/(public)/sign-in/page.tsx
-import * as entry from '../../../../../src/app/(public)/sign-in/page.js'
+// File: /home/medina/projects/mili-infra/mili-frontend/src/app/(private)/cameras/page.tsx
+import * as entry from '../../../../../src/app/(private)/cameras/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
-type TEntry = typeof import('../../../../../src/app/(public)/sign-in/page.js')
+type TEntry = typeof import('../../../../../src/app/(private)/cameras/page.js')
 
 type SegmentParams<T extends Object = any> = T extends Record<string, any>
   ? { [K in keyof T]: T[K] extends string ? string | string[] | undefined : never }

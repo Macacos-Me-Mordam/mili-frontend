@@ -1,68 +1,96 @@
-import { FileText, LogOut } from "lucide-react";
-
+'use client'
+import { Button } from '@/components/ui/button'
+import { Separator } from '@/components/ui/separator'
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
+// Correção 1: Importando o hook com o nome correto do seu arquivo.
+import { useIsMobile } from '@/hooks/use-mobile'
 import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-} from "@/components/ui/sidebar";
+  Home,
+  Menu,
+  Video,
+  Camera,
+  History,
+  LogOut,
+} from 'lucide-react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
-import { Separator } from "@/components/ui/separator";
+export function AppSidebar() {
+  const pathname = usePathname()
+  // Correção 2: Chamando o hook corretamente e atribuindo o resultado (booleano) à constante.
+  const isMobile = useIsMobile()
 
-const items = [
-  {
-    title: "Anatel DICI",
-    url: "/",
-    icon: FileText,
-  },
-];
+  const navItems = [
+    {
+      href: '/dashboard',
+      icon: Home,
+      label: 'Início',
+    },
+    {
+      href: '/occurrences',
+      icon: Video,
+      label: 'Ocorrências',
+    },
+    {
+      href: '/cameras',
+      icon: Camera,
+      label: 'Status das Câmeras',
+    },
+    {
+      href: '/historic',
+      icon: History,
+      label: 'Histórico',
+    },
+  ]
 
-export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
-  return (
-    <Sidebar collapsible="offcanvas" {...props}>
-      <SidebarContent>
-        {/* A imagem foi substituída por este título de texto */}
-        <div className="flex items-center justify-center h-16 mb-2 border-b">
-          <h1 className="text-xl font-semibold">Seu Projeto</h1>
-        </div>
+  const content = (
+    <aside className="flex h-full w-full flex-col p-4">
+      <div className="flex items-center gap-2">
+        <h1 className="text-xl font-bold">Mili</h1>
+      </div>
+      <Separator className="my-4" />
+      <nav className="flex flex-1 flex-col justify-between">
+        <ul className="flex flex-col gap-2">
+          {navItems.map((item) => (
+            <li key={item.href}>
+              <Button
+                variant={pathname === item.href ? 'secondary' : 'ghost'}
+                className="w-full justify-start"
+                asChild
+              >
+                <Link href={item.href}>
+                  <item.icon className="mr-2 h-4 w-4" />
+                  {item.label}
+                </Link>
+              </Button>
+            </li>
+          ))}
+        </ul>
+        <Button variant="ghost" className="w-full justify-start" asChild>
+          <Link href="/sign-in">
+            <LogOut className="mr-2 h-4 w-4" />
+            Sair
+          </Link>
+        </Button>
+      </nav>
+    </aside>
+  )
 
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {items.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <SidebarMenuButton asChild>
-                    <a href={item.url} className="flex items-center gap-2">
-                      <item.icon />
-                      <span>{item.title}</span>
-                    </a>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
+  if (isMobile) {
+    return (
+      <Sheet>
+        <SheetTrigger asChild>
+          <Button size="icon" variant="outline">
+            <Menu className="h-5 w-5" />
+          </Button>
+        </SheetTrigger>
+        <SheetContent side="left" className="w-72 p-0">
+          {content}
+        </SheetContent>
+      </Sheet>
+    )
+  }
 
-      <SidebarFooter>
-        <Separator />
-        <SidebarGroupContent>
-          <SidebarMenu>
-            <SidebarMenuItem>
-              <SidebarMenuButton asChild>
-                <a href="/api/logout" className="flex items-center gap-2">
-                  <LogOut />
-                  <span>Sair</span>
-                </a>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </SidebarGroupContent>
-      </SidebarFooter>
-    </Sidebar>
-  );
+  return <div className="hidden lg:block lg:w-72">{content}</div>
 }
