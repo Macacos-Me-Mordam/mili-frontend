@@ -9,7 +9,21 @@
     "/(public)/sign-in/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
+<<<<<<< HEAD
       "static/chunks/app/(public)/sign-in/page.js"
+=======
+      "static/chunks/app/page.js"
+    ],
+    "/(private)/layout": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(private)/layout.js"
+    ],
+    "/(private)/historic/page": [
+      "static/chunks/webpack.js",
+      "static/chunks/main-app.js",
+      "static/chunks/app/(private)/historic/page.js"
+>>>>>>> b29514dda9fc1af526fbaaf928280e6d0a7e4232
     ]
   }
 }

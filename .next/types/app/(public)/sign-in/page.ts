@@ -1,5 +1,10 @@
+<<<<<<< HEAD:.next/types/app/(public)/sign-in/page.ts
 // File: /home/medina/projects/mili-infra/mili-frontend/src/app/(public)/sign-in/page.tsx
 import * as entry from '../../../../../src/app/(public)/sign-in/page.js'
+=======
+// File: /home/davipsadelo/Projects/mili-infra/mili-frontend/src/app/page.tsx
+import * as entry from '../../../src/app/page.js'
+>>>>>>> b29514dda9fc1af526fbaaf928280e6d0a7e4232:.next/types/app/page.ts
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
 type TEntry = typeof import('../../../../../src/app/(public)/sign-in/page.js')

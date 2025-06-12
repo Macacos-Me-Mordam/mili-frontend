@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 // File: /home/medina/projects/mili-infra/mili-frontend/src/app/(private)/layout.tsx
+=======
+// File: /home/davipsadelo/Projects/mili-infra/mili-frontend/src/app/(private)/layout.tsx
+>>>>>>> b29514dda9fc1af526fbaaf928280e6d0a7e4232
 import * as entry from '../../../../src/app/(private)/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
