@@ -11,6 +11,7 @@ exports.id = "vendor-chunks/class-variance-authority";
 exports.ids = ["vendor-chunks/class-variance-authority"];
 exports.modules = {
 
+<<<<<<< HEAD
 /***/ "(rsc)/./node_modules/class-variance-authority/dist/index.mjs":
 /*!**************************************************************!*\
   !*** ./node_modules/class-variance-authority/dist/index.mjs ***!
@@ -21,6 +22,8 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 
 /***/ }),
 
+=======
+>>>>>>> b29514dda9fc1af526fbaaf928280e6d0a7e4232
 /***/ "(ssr)/./node_modules/class-variance-authority/dist/index.mjs":
 /*!**************************************************************!*\
   !*** ./node_modules/class-variance-authority/dist/index.mjs ***!

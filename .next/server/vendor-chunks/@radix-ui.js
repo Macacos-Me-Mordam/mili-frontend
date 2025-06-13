@@ -11,6 +11,7 @@ exports.id = "vendor-chunks/@radix-ui";
 exports.ids = ["vendor-chunks/@radix-ui"];
 exports.modules = {
 
+<<<<<<< HEAD
 /***/ "(rsc)/./node_modules/@radix-ui/react-compose-refs/dist/index.mjs":
 /*!******************************************************************!*\
   !*** ./node_modules/@radix-ui/react-compose-refs/dist/index.mjs ***!
@@ -31,6 +32,8 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpac
 
 /***/ }),
 
+=======
+>>>>>>> b29514dda9fc1af526fbaaf928280e6d0a7e4232
 /***/ "(ssr)/./node_modules/@radix-ui/primitive/dist/index.mjs":
 /*!*********************************************************!*\
   !*** ./node_modules/@radix-ui/primitive/dist/index.mjs ***!
