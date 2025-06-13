@@ -9,7 +9,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useParams } from "next/navigation";
 
-
 const mockCameras = [
     { id: 1, name: 'Câmera 01', address: 'Hall de entrada', status: 'online', imageUrl: 'https://picsum.photos/seed/cam1/1280/720', model: 'AXIS P1375-E', serial: 'AC-172-88-19', lastMaintenance: '01/03/2025' },
     { id: 2, name: 'Câmera 02', address: 'Corredor Leste', status: 'online', imageUrl: 'https://picsum.photos/seed/cam2/1280/720', model: 'AXIS M1135', serial: 'AC-172-88-20', lastMaintenance: '15/02/2025' },
@@ -47,11 +46,10 @@ export default function SingleCameraPage() {
                         <ArrowLeft className="w-4 h-4" />
                     </Link>
                 </Button>
-                <h1 className="text-3xl font-bold tracking-tight">{`${camera.name} - ${camera.address}`}</h1>
+                <h1 className="text-xl font-bold tracking-tight">{`${camera.name} - ${camera.address}`}</h1>
             </div>
             <div className="flex flex-col lg:flex-row gap-6">
-                {/* Lado Esquerdo: Visualização da Câmera */}
-                <div className="flex-1 lg:w-2/3">
+                <div className="flex-1 lg:w-3/4">
                     <div className="relative w-full bg-black rounded-lg overflow-hidden aspect-video">
                         <Image
                             src={camera.imageUrl}
@@ -70,15 +68,14 @@ export default function SingleCameraPage() {
                     </div>
                 </div>
 
-              
-                <div className="lg:w-1/3">
+                <div className="lg:w-1/4">
                     <Card>
                         <CardHeader>
                             <CardTitle>Detalhes da Câmera</CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-4">
-                            <div className="flex justify-between items-center">
-                                <span className="text-muted-foreground">Status</span>
+                            <div className="text-sm flex justify-between items-center">
+                                <span className="text-sm text-muted-foreground">Status</span>
                                 <Badge 
                                     className={`${camera.status === 'online' ? 'border-green-500 text-green-500' : 'border-red-500 text-red-500'}`}
                                     variant="outline"
@@ -89,23 +86,23 @@ export default function SingleCameraPage() {
                             </div>
                             <Separator />
                             <div className="flex justify-between items-center">
-                                <span className="text-muted-foreground">Endereço</span>
-                                <span className="font-semibold">{camera.address}</span>
+                                <span className="text-sm text-muted-foreground">Endereço</span>
+                                <span className="text-sm font-semibold">{camera.address}</span>
                             </div>
                              <Separator />
                             <div className="flex justify-between items-center">
-                                <span className="text-muted-foreground">Modelo</span>
-                                <span className="font-semibold">{camera.model}</span>
+                                <span className="text-sm text-muted-foreground">Modelo</span>
+                                <span className="text-sm font-semibold">{camera.model}</span>
                             </div>
                              <Separator />
                             <div className="flex justify-between items-center">
-                                <span className="text-muted-foreground">Número de Série</span>
-                                <span className="font-semibold">{camera.serial}</span>
+                                <span className="text-sm text-muted-foreground">Número de Série</span>
+                                <span className="text-sm font-semibold">{camera.serial}</span>
                             </div>
                              <Separator />
                              <div className="flex justify-between items-center">
-                                <span className="text-muted-foreground">Última Manutenção</span>
-                                <span className="font-semibold">{camera.lastMaintenance}</span>
+                                <span className="text-sm text-muted-foreground">Última Manutenção</span>
+                                <span className="text-sm font-semibold">{camera.lastMaintenance}</span>
                             </div>
                             <Separator />
                              <Button className="w-full mt-4 bg-orange-500 hover:bg-orange-600">

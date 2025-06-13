@@ -8,7 +8,6 @@ import {
 import { Badge } from '@/components/ui/badge'
 import Image from 'next/image'
 
-// Dados Mockados para as ocorrências
 const mockOccurrences = [
   {
     id: 1,
@@ -42,17 +41,36 @@ const mockOccurrences = [
     imageUrl: 'https://picsum.photos/seed/4/400/300',
     verified: false,
   },
+  {
+    id: 5,
+    location: 'Corredor Administrativo',
+    camera: 'Câmera 03',
+    date: '11/06/2025 18:00',
+    imageUrl: 'https://picsum.photos/seed/4/400/300',
+    verified: false,
+  },
+  {
+    id: 6,
+    location: 'Corredor Administrativo',
+    camera: 'Câmera 03',
+    date: '11/06/2025 18:00',
+    imageUrl: 'https://picsum.photos/seed/4/400/300',
+    verified: false,
+  },
 ]
 
 export default function OccurrencesPage() {
   return (
     <div className="p-6 space-y-6">
-      <h1 className="text-3xl font-bold tracking-tight">Visualizar Ocorrências</h1>
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+      <h1 className="text-xl font-bold tracking-tight">Visualizar Ocorrências</h1>
+      <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
         {mockOccurrences.map((occurrence) => (
-          <Card key={occurrence.id} className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer">
+          <Card
+            key={occurrence.id}
+            className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer h-80 w-60 flex flex-col"
+          >
             <CardHeader className="p-0">
-              <div className="relative w-full h-40">
+              <div className="relative w-full h-20">
                 <Image
                   src={occurrence.imageUrl}
                   alt={`Ocorrência em ${occurrence.location}`}
@@ -61,24 +79,27 @@ export default function OccurrencesPage() {
                 />
               </div>
             </CardHeader>
-            <CardContent className="p-4 space-y-2">
+            <CardContent className="flex flex-col justify-between flex-1 gap-2 p-3">
               <div>
-                <CardDescription>Local da Ocorrência</CardDescription>
-                <CardTitle className="text-lg">{occurrence.location}</CardTitle>
+                <CardDescription className="text-xs text-muted-foreground mb-0.5">Local da Ocorrência</CardDescription>
+                <CardTitle className="text-sm font-semibold">{occurrence.location}</CardTitle>
               </div>
               <div>
-                <CardDescription>Nome da Câmera</CardDescription>
-                <p className="font-semibold">{occurrence.camera}</p>
+                <CardDescription className="text-xs text-muted-foreground mb-0.5">Nome da Câmera</CardDescription>
+                <p className="text-sm font-medium">{occurrence.camera}</p>
               </div>
               <div>
-                <CardDescription>Data</CardDescription>
-                <p className="text-sm text-muted-foreground">{occurrence.date}</p>
+                <CardDescription className="text-xs text-muted-foreground mb-0.5">Data</CardDescription>
+                <p className="text-xs text-muted-foreground">{occurrence.date}</p>
               </div>
               {!occurrence.verified && (
-                 <Badge variant="outline" className="border-orange-500 text-orange-500">
-                    <span className="w-2 h-2 mr-2 rounded-full bg-orange-500"></span>
-                    Não Verificado
-                 </Badge>
+                <Badge
+                  variant="outline"
+                  className="border-orange-500 text-orange-500 text-xs mt-1"
+                >
+                  <span className="w-2 h-2 mr-1.5 rounded-full bg-orange-500"></span>
+                  Não Verificado
+                </Badge>
               )}
             </CardContent>
           </Card>

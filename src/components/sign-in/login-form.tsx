@@ -1,10 +1,9 @@
-// macacos-me-mordam/mili-frontend/Macacos-Me-Mordam-mili-frontend-b68b767b9a6cc7b2708e8fe470d88cd16023e1c1/src/components/sign-in/login-form.tsx
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
-import { useRouter } from 'next/navigation'; // Importar useRouter
+import { useRouter } from 'next/navigation';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -16,18 +15,16 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'; // Importar componentes de Card
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
-// Esquema de validação do formulário
 const formSchema = z.object({
   email: z.string().email({ message: 'E-mail inválido.' }),
   password: z.string().min(6, { message: 'A senha deve ter pelo menos 6 caracteres.' }),
 });
 
 export function LoginForm() {
-  const router = useRouter(); // Inicializar o router
+  const router = useRouter();
 
-  // 1. Defina seu formulário.
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -36,7 +33,6 @@ export function LoginForm() {
     },
   });
 
-  // funcao falsa de login so pra mostrar
   async function onSubmit(values: z.infer<typeof formSchema>) {
     if (values.email === 'admin@example.com' && values.password === 'admin123') {
       console.log('Credenciais de admin corretas, redirecionando para ocorrências...');
@@ -52,8 +48,8 @@ export function LoginForm() {
   return (
     <Card className="w-[350px]">
       <CardHeader>
-        <CardTitle className="text-lg font-semibold">MILI</CardTitle>
-        <CardDescription>Entre na sua conta Mili.</CardDescription>
+        <CardTitle className="text-lg font-semibold text-center">MILI</CardTitle>
+        <CardDescription className='text-center'>Faca login com suas credencias</CardDescription>
       </CardHeader>
       <CardContent>
         <Form {...form}>

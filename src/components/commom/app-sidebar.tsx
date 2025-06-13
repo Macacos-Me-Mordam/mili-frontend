@@ -1,4 +1,3 @@
-// macacos-me-mordam/mili-frontend/Macacos-Me-Mordam-mili-frontend-b68b767b9a6cc7b2708e8fe470d88cd16023e1c1/src/components/commom/app-sidebar.tsx
 'use client'
 import {
   Home,
@@ -46,22 +45,9 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
 
   return (
     <Sidebar collapsible="offcanvas" {...props}>
-      <SidebarContent className="bg-slate-600 flex flex-col justify-between">
+      <SidebarContent className="flex flex-col justify-between">
         <div className="p-2">
-          <h1 className="text-lg font-semibold mb-4">MILI</h1>
-          {/* futura logo dogao se tiver}
-          {/*
-          <Image
-            src={logoPlaceholder}
-            alt="Mili Logo"
-            width={100}
-            height={60}
-            draggable={false}
-            className="select-none"
-            priority
-          />
-          */}
-          <SidebarSeparator className="my-4" />
+          <h1 className="text font-semibold mb-4 ml-4">username</h1>
           <SidebarGroup>
             <SidebarGroupContent>
               <SidebarMenu>
@@ -84,7 +70,6 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
 
      
         <div className="p-2 mt-auto"> 
-          <SidebarSeparator className="my-4" />
           <SidebarGroup> 
             <SidebarGroupContent>
               <SidebarMenu>
