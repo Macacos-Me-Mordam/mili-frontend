@@ -1,4 +1,4 @@
-// File: /home/medina/projects/mili-infra/mili-frontend/src/app/(private)/cameras/page.tsx
+// File: /home/davipsadelo/Projects/mili-infra/mili-frontend/src/app/(private)/cameras/page.tsx
 import * as entry from '../../../../../src/app/(private)/cameras/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

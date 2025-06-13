@@ -25,11 +25,6 @@ import {
 
 const navItems = [
   {
-    href: '/dashboard',
-    icon: Home,
-    label: 'Início',
-  },
-  {
     href: '/occurrences',
     icon: Video,
     label: 'Ocorrências',
@@ -51,7 +46,7 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
 
   return (
     <Sidebar collapsible="offcanvas" {...props}>
-      <SidebarContent className="flex flex-col justify-between">
+      <SidebarContent className="bg-slate-600 flex flex-col justify-between">
         <div className="p-2">
           <h1 className="text-lg font-semibold mb-4">MILI</h1>
           {/* futura logo dogao se tiver}
