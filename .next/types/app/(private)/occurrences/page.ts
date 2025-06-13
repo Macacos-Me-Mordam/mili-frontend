@@ -1,4 +1,4 @@
-// File: /home/medina/projects/mili-infra/mili-frontend/src/app/(private)/occurrences/page.tsx
+// File: /home/davipsadelo/Projects/mili-infra/mili-frontend/src/app/(private)/occurrences/page.tsx
 import * as entry from '../../../../../src/app/(private)/occurrences/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 

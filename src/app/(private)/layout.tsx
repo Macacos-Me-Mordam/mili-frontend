@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 import type { Metadata } from 'next';
 import { ReactNode } from 'react';
@@ -24,3 +25,22 @@ export default async function PrivateLayout({ children }: { children: ReactNode 
         </div>
     );
 }
+=======
+import { AppSidebar } from "@/components/app-sidebar"
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
+
+export default function PrivateLayout({ children }: { children: React.ReactNode }) {
+  return (
+     
+    <SidebarProvider className='inset'>
+      <AppSidebar/>
+      <main>
+        <SidebarTrigger />
+        {children}
+      </main>
+    </SidebarProvider>
+
+  )
+}
+
+>>>>>>> b29514dda9fc1af526fbaaf928280e6d0a7e4232

@@ -1,5 +1,10 @@
-// File: /home/medina/projects/mili-infra/mili-frontend/src/app/(private)/cameras/page.tsx
+<<<<<<< HEAD:.next/types/app/(private)/cameras/page.ts
+// File: /home/davipsadelo/Projects/mili-infra/mili-frontend/src/app/(private)/cameras/page.tsx
 import * as entry from '../../../../../src/app/(private)/cameras/page.js'
+=======
+// File: /home/davipsadelo/Projects/mili-infra/mili-frontend/src/app/page.tsx
+import * as entry from '../../../src/app/page.js'
+>>>>>>> b29514dda9fc1af526fbaaf928280e6d0a7e4232:.next/types/app/page.ts
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
 type TEntry = typeof import('../../../../../src/app/(private)/cameras/page.js')
