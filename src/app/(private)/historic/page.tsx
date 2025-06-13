@@ -103,7 +103,7 @@ function groupOccurrences(data: typeof mockOccurrences) {
 
 function OccurrenceGrid({ data }: { data: typeof mockOccurrences }) {
     return (
-        <div className="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+        <div className="grid gap-4 auto-cols-fr justify-center [grid-template-columns:repeat(auto-fit,minmax(240px,1fr))]">
             {data.map((occurrence) => (
                 <Card
                     key={occurrence.id}
