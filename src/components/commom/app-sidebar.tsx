@@ -4,8 +4,9 @@ import {
   Video,
   Camera,
   History,
-  LogOut, 
+  LogOut,
   FileText,
+  LogOutIcon,
 } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -38,6 +39,11 @@ const navItems = [
     icon: History,
     label: 'Histórico',
   },
+    {
+    href: '/logout',
+    icon: LogOutIcon,
+    label: 'Sair',
+  },
 ]
 
 export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
@@ -47,18 +53,20 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarContent className="flex flex-col justify-between">
         <div className="p-2">
-          <h1 className="text font-semibold mb-4 ml-4">username</h1>
+          <h1 className="text font-semibold mb-4 ml-4 text-white">username</h1>
           <SidebarGroup>
             <SidebarGroupContent>
               <SidebarMenu>
-                {navItems.map((item) => (
+                {navItems.slice(0,3).map((item) => (
                   <SidebarMenuItem key={item.href}>
-                    <SidebarMenuButton asChild isActive={pathname === item.href}>
-                      <Link href={item.href}>
-                        <span className="flex items-center gap-2">
-                          <item.icon />
-                          <span>{item.label}</span>
-                        </span>
+                    <SidebarMenuButton asChild isActive={pathname === item.href} className='text-black'>
+                      <Link
+                        href={item.href}
+                        className={`flex items-center gap-2 px-2 py-1.5 rounded-md transition-colors
+    ${pathname ===  item.href? 'bg-muted text-black' : 'text-white hover:bg-muted hover:text-black'}`}
+                      >
+                        <item.icon />
+                        <span>{item.label}</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -68,21 +76,25 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
           </SidebarGroup>
         </div>
 
-     
-        <div className="p-2 mt-auto"> 
-          <SidebarGroup> 
+
+        <div className="p-2 mt-auto">
+          <SidebarGroup>
             <SidebarGroupContent>
               <SidebarMenu>
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <Link href="/sign-in"> 
-                      <span className="flex items-center gap-2">
-                        <LogOut />
-                        <span>Sair</span>
-                      </span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
+                {navItems.slice(3,4).map((item) => (
+                  <SidebarMenuItem key={item.href}>
+                    <SidebarMenuButton asChild isActive={pathname === item.href} className='text-black'>
+                      <Link
+                        href={item.href}
+                        className={`flex items-center gap-2 px-2 py-1.5 rounded-md transition-colors
+    ${pathname ===  item.href? 'bg-muted text-black' : 'text-white hover:bg-muted hover:text-black'}`}
+                      >
+                        <item.icon />
+                        <span>{item.label}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
               </SidebarMenu>
             </SidebarGroupContent>
           </SidebarGroup>
