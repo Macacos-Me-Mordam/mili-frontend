@@ -63,8 +63,4 @@ function AccordionContent({
   )
 }
 
-<<<<<<< HEAD
 export { Accordion, AccordionItem, AccordionTrigger, AccordionContent }
-=======
-export { Accordion, AccordionItem, AccordionTrigger, AccordionContent }
->>>>>>> b29514dda9fc1af526fbaaf928280e6d0a7e4232

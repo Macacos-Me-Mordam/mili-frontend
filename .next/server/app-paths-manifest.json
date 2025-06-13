@@ -1,11 +1,8 @@
 {
-<<<<<<< HEAD
-  "/(private)/historic/page": "app/(private)/historic/page.js",
+  "/_not-found/page": "app/_not-found/page.js",
+  "/(public)/sign-in/page": "app/(public)/sign-in/page.js",
   "/(private)/occurrences/page": "app/(private)/occurrences/page.js",
   "/(private)/cameras/page": "app/(private)/cameras/page.js",
+  "/(private)/historic/page": "app/(private)/historic/page.js",
   "/(private)/cameras/[id]/page": "app/(private)/cameras/[id]/page.js"
-=======
-  "/page": "app/page.js",
-  "/(private)/historic/page": "app/(private)/historic/page.js"
->>>>>>> b29514dda9fc1af526fbaaf928280e6d0a7e4232
 }
