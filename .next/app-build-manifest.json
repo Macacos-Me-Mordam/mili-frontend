@@ -6,25 +6,10 @@
       "static/css/app/layout.css",
       "static/chunks/app/layout.js"
     ],
-    "/(private)/layout": [
+    "/page": [
       "static/chunks/webpack.js",
       "static/chunks/main-app.js",
-      "static/chunks/app/(private)/layout.js"
-    ],
-    "/(private)/cameras/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(private)/cameras/page.js"
-    ],
-    "/(private)/occurrences/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(private)/occurrences/page.js"
-    ],
-    "/(private)/cameras/[id]/page": [
-      "static/chunks/webpack.js",
-      "static/chunks/main-app.js",
-      "static/chunks/app/(private)/cameras/[id]/page.js"
+      "static/chunks/app/page.js"
     ],
     "/(public)/sign-in/page": [
       "static/chunks/webpack.js",
