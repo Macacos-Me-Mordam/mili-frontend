@@ -1,89 +1,86 @@
 'use client';
 
+import { useState } from 'react';
+import { Form, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { useRouter } from 'next/navigation';
-
+import * as z from 'zod';
+import { useAuth } from '@/contexts/auth-context'; 
 import { Button } from '@/components/ui/button';
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@/components/ui/form';
-import { Input } from '@/components/ui/input';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '../ui/card';
+import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '../ui/form';
+import { Input } from '../ui/input';
+
 
 const formSchema = z.object({
-  email: z.string().email({ message: 'E-mail inválido.' }),
-  password: z.string().min(6, { message: 'A senha deve ter pelo menos 6 caracteres.' }),
+  email: z.string().email({ message: 'Por favor, insira um email válido.' }),
+  password: z.string().min(1, { message: 'A palavra-passe é obrigatória.' }),
 });
 
-export function LoginForm() {
-  const router = useRouter();
+type LoginFormValues = z.infer<typeof formSchema>;
 
-  const form = useForm<z.infer<typeof formSchema>>({
+export function LoginForm() {
+  const { login, isLoggingIn } = useAuth();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  const form = useForm<LoginFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      email: '',
-      password: '',
-    },
+    defaultValues: { email: '', password: '' },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    if (values.email === 'admin@example.com' && values.password === 'admin123') {
-      console.log('Credenciais de admin corretas, redirecionando para ocorrências...');
-      router.push('/occurrences')
-    } else {
-      console.log('Tentativa de login:', values);
-      console.log('Credenciais inválidas ou outro usuário. Não redirecionando.');
-      form.setError('email', { message: 'E-mail ou senha inválidos.' });
-      form.setError('password', { message: 'E-mail ou senha inválidos.' });
+  const onSubmit = async (values: LoginFormValues) => {
+    setErrorMessage(null);
+    try {
+      await login(values);
+    } catch (error) {
+      setErrorMessage('Email ou palavra-passe incorretos. Tente novamente.');
+      console.error(error);
     }
-  }
+  };
 
   return (
-    <Card className="w-[350px]">
-      <CardHeader>
-        <CardTitle className="text-lg font-semibold text-center">MILI</CardTitle>
-        <CardDescription className='text-center'>Faca login com suas credencias</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            <FormField
-              control={form.control}
-              name="email"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>E-mail</FormLabel>
-                  <FormControl>
-                    <Input placeholder="seu_email@example.com" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="password"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Senha</FormLabel>
-                  <FormControl>
-                    <Input type="password" placeholder="********" {...field} />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <Button type="submit" className="w-full">Entrar</Button>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
+      <Card className="w-full max-w-sm">
+          <CardContent>
+              <Form {...form}>
+                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                      <FormField
+                          control={form.control}
+                          name="email"
+                          render={({ field }) => (
+                              <FormItem>
+                                  <FormLabel>Email</FormLabel>
+                                  <FormControl>
+                                      <Input placeholder="exemplo@email.com" {...field} />
+                                  </FormControl>
+                                  <FormMessage />
+                              </FormItem>
+                          )}
+                      />
+                      <FormField
+                          control={form.control}
+                          name="password"
+                          render={({ field }) => (
+                              <FormItem>
+                                  <FormLabel>Palavra-passe</FormLabel>
+                                  <FormControl>
+                                      <Input type="password" placeholder="••••••••" {...field} />
+                                  </FormControl>
+                                  <FormMessage />
+                              </FormItem>
+                          )}
+                      />
+                      
+                      {errorMessage && (
+                          <p className="text-sm font-medium text-destructive">
+                              {errorMessage}
+                          </p>
+                      )}
+
+                      <Button type="submit" className="w-full" disabled={isLoggingIn}>
+                          {isLoggingIn ? 'A entrar...' : 'Entrar'}
+                      </Button>
+                  </form>
+              </Form>
+          </CardContent>
+      </Card>
   );
 }
