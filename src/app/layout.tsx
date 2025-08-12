@@ -1,24 +1,40 @@
-import type { Metadata } from "next";
-import "./globals.css";
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+import './globals.css'
+
+import { ThemeProvider } from '@/components/theme-provider'
+import { QueryProvider } from '@/components/query-provider' // 1. Importar
+import { AuthProvider } from '@/contexts/auth-context'    // 2. Importar
+
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: "MILI",
-  description: "Monitoramento Inteligente Sobre Lixo Improprio",
-};
+  title: 'Mili - Monitoramento',
+  description: 'Sistema de Monitoramento de Ocorrências',
+}
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
-    <html lang="en">
-      <body
-        className="__variable_5cfdac __variable_9a8899 antialiased vsc-initialized"
-        cz-shortcut-listen="true"
-      >
-        {children}
+    <html lang="pt-BR" suppressHydrationWarning>
+      <body className={inter.className}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <QueryProvider>
+            <AuthProvider>
+              {children}
+            </AuthProvider>
+          </QueryProvider>
+          
+        </ThemeProvider>
       </body>
     </html>
-  );
+  )
 }

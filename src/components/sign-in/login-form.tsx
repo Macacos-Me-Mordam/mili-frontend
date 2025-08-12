@@ -1,9 +1,10 @@
 'use client';
 
-import { zodResolver } from '@hookform/resolvers/zod';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
-import { useRouter } from 'next/navigation';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { useAuth } from '@/contexts/auth-context';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -18,40 +19,41 @@ import { Input } from '@/components/ui/input';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 const formSchema = z.object({
-  email: z.string().email({ message: 'E-mail inválido.' }),
-  password: z.string().min(6, { message: 'A senha deve ter pelo menos 6 caracteres.' }),
+  email: z.string().email({ message: 'Por favor, insira um email válido.' }),
+  password: z.string().min(1, { message: 'A palavra-passe é obrigatória.' }),
 });
 
-export function LoginForm() {
-  const router = useRouter();
+type LoginFormValues = z.infer<typeof formSchema>;
 
-  const form = useForm<z.infer<typeof formSchema>>({
+export function LoginForm() {
+  const { login, isLoggingIn } = useAuth();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+ 
+  const form = useForm<LoginFormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
-      email: '',
-      password: '',
-    },
+    defaultValues: { email: '', password: '' },
   });
 
-  async function onSubmit(values: z.infer<typeof formSchema>) {
-    if (values.email === 'admin@example.com' && values.password === 'admin123') {
-      console.log('Credenciais de admin corretas, redirecionando para ocorrências...');
-      router.push('/occurrences')
-    } else {
-      console.log('Tentativa de login:', values);
-      console.log('Credenciais inválidas ou outro usuário. Não redirecionando.');
-      form.setError('email', { message: 'E-mail ou senha inválidos.' });
-      form.setError('password', { message: 'E-mail ou senha inválidos.' });
+  const onSubmit = async (values: LoginFormValues) => {
+    setErrorMessage(null);
+    try {
+      await login(values);
+    } catch (error) {
+      setErrorMessage('Email ou palavra-passe incorretos. Tente novamente.');
     }
-  }
+  };
 
   return (
-    <Card className="w-[350px]">
+    <Card className="w-full max-w-sm">
       <CardHeader>
-        <CardTitle className="text-lg font-semibold text-center">MILI</CardTitle>
-        <CardDescription className='text-center'>Faca login com suas credencias</CardDescription>
+        <CardTitle className="text-2xl">MILI</CardTitle>
+        <CardDescription>
+          Insira o seu email e senha para acessar o sistema
+        </CardDescription>
       </CardHeader>
       <CardContent>
+  
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
             <FormField
@@ -59,9 +61,9 @@ export function LoginForm() {
               name="email"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>E-mail</FormLabel>
+                  <FormLabel>Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="seu_email@example.com" {...field} />
+                    <Input placeholder="exemplo@email.com" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -72,15 +74,24 @@ export function LoginForm() {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Senha</FormLabel>
+                  <FormLabel>Palavra-passe</FormLabel>
                   <FormControl>
-                    <Input type="password" placeholder="********" {...field} />
+                    <Input type="password" placeholder="••••••••" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full">Entrar</Button>
+            
+            {errorMessage && (
+              <p className="text-sm font-medium text-destructive">
+                {errorMessage}
+              </p>
+            )}
+
+            <Button type="submit" className="w-full" disabled={isLoggingIn}>
+              {isLoggingIn ? 'A entrar...' : 'Entrar'}
+            </Button>
           </form>
         </Form>
       </CardContent>

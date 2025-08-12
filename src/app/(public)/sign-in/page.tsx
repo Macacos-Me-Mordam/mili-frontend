@@ -1,10 +1,9 @@
+import { LoginForm } from '@/components/sign-in/login-form';
 
-import { LoginForm } from "@/components/sign-in/login-form";
-
-export default function LoginPage() {
+export default function SignInPage() {
   return (
-    <main className="flex min-h-screen flex-col items-center justify-center p-8">
+    <div className="flex min-h-screen items-center justify-center">
       <LoginForm />
-    </main>
+    </div>
   );
 }
