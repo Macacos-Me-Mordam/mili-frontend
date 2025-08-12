@@ -3,7 +3,8 @@
 import { createContext, useContext, ReactNode, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { getProfile, login, LoginCredentials, UserProfile } from '@/services/auth-service'; 
+import { getProfile, login, } from '@/services/auth-service'; 
+import { LoginCredentials, UserProfile } from '@/model/interfaces/user-data';
 
 interface AuthContextType {
   user: UserProfile | null;
@@ -32,6 +33,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     staleTime: 5 * 60 * 1000,
   });
 
+  // estudar mutation
   const { mutateAsync: loginMutation, isPending: isLoggingIn } = useMutation({
     mutationFn: login,
     onSuccess: () => {
@@ -65,7 +67,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     user: user ?? null,
     isLoadingProfile,
     login: handleLogin,
-    isLoggingIn,
+    isLoggingIn, // se da para saber se o user esta logado pelo user, se user == null: nao existe
     logout: handleLogout,
   };
 
