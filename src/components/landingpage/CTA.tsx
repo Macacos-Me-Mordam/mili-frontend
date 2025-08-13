@@ -1,6 +1,6 @@
 export function CTA() {
   return (
-    <section className="py-24 bg-green-600 text-center">
+    <section className="py-24 bg-sky-600 text-center">
       <div className="container mx-auto px-6">
         <h2 className="text-4xl font-bold text-white mb-4">Quer transformar a sua cidade?</h2>
         <p className="text-lg text-white mb-6">
@@ -8,7 +8,7 @@ export function CTA() {
         </p>
         <a
           href="mailto:contato@meuprojeto.com"
-          className="inline-block px-6 py-3 text-lg font-medium bg-white text-green-700 rounded shadow hover:bg-gray-200"
+          className="inline-block px-6 py-3 text-lg font-medium bg-white text-sky-600 rounded shadow hover:bg-gray-200"
         >
           Entrar em contato
         </a>

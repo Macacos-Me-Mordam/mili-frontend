@@ -1,10 +1,11 @@
-import { apiAuth } from '@/lib/api';
-import { SettingKey, UpdateSettingPayload } from './types';
-
+// services/settings-service.ts
+import { api } from "@/lib/api-client";
+import { SettingKey, UpdateSettingPayload } from "./types";
 
 export const updateSetting = (
   key: SettingKey,
-  payload: UpdateSettingPayload,
+  payload: UpdateSettingPayload
 ): Promise<void> => {
-  return apiAuth.put(`/settings/${key}`, { body: payload });
+  // doFetch já trata 204 (No Content) => retorna void sem tentar .json()
+  return api.put<void>(`/settings/${key}`, payload);
 };

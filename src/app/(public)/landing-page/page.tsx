@@ -1,11 +1,10 @@
-// app/page.tsx ou pages/index.tsx
-import { Hero } from "@/components/landing-page/Hero"
-import { Features } from "@/components/landing-page/Features"
-import { Steps } from "@/components/landing-page/Steps"
-import { Stats } from "@/components/landing-page/Stats"
-import { CTA } from "@/components/landing-page/CTA"
-import { Footer } from "@/components/landing-page/Footer"
-import { VideoDemo } from "@/components/landing-page/VideoDemo"
+import { Hero } from "@/components/landingpage/Hero"
+import { Features } from "@/components/landingpage/Features"
+import { Steps } from "@/components/landingpage/Steps"
+import { Stats } from "@/components/landingpage/Stats"
+import { CTA } from "@/components/landingpage/CTA"
+import { Footer } from "@/components/landingpage/Footer"
+import { VideoDemo } from "@/components/landingpage/VideoDemo"
 
 export default function Home() {
   return (

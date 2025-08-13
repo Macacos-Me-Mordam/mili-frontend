@@ -5,7 +5,7 @@ import { useEffect } from "react"
 export default function RedirectPage() {
     const router = useRouter();
     useEffect(() => {
-        router.replace('/sign-in');
+        router.replace('/landing-page');
     }, [])
 
     return null

@@ -15,7 +15,7 @@ export function Steps() {
               key={i}
               className="bg-gray-800 border border-gray-700 p-6 rounded-xl transition transform hover:scale-105 shadow-md"
             >
-              <div className="text-green-400 text-2xl font-bold mb-2">Passo {i + 1}</div>
+              <div className="text-sky-600 text-2xl font-bold mb-2">Passo {i + 1}</div>
               <p className="text-gray-200">{step}</p>
             </div>
           ))}

@@ -11,8 +11,6 @@ export function middleware(request: NextRequest) {
     request.nextUrl.pathname.startsWith(route),
   )
 
-
-
  
   if (!token && isAccessingPrivateRoute) {
     return NextResponse.redirect(new URL('/sign-in', request.url))

@@ -1,23 +1,32 @@
-import { api, apiAuth } from '@/lib/api';
-import { LoginCredentials, UserProfile } from '@/model/interfaces/user-data';
+// src/services/auth-service.ts
 
+import { connectionAPIGet, connectionAPIPost } from "@/lib/ConnectionApi";
+import { LoginCredentials, UserProfile } from "@/model/interfaces/user-data";
+
+const API_URL = 'http://localhost:8080';
+
+/**
+ * Realiza o login do usuário.
+ * Chama o endpoint público de login.
+ */
 export const login = async (credentials: LoginCredentials): Promise<void> => {
-  try {
-    // Usa a instância PÚBLICA, pois o utilizador ainda não está autenticado.
-    await api.post('/users/login', { body: credentials });
-  } catch (error) {
-    console.error('Erro no login:', error);
-    throw new Error('Email ou palavra-passe inválidos.');
-  }
+  // A função de login não retorna dados, apenas o cookie de autenticação.
+  await connectionAPIPost<void>(`${API_URL}/auth/login`, credentials);
 };
 
+/**
+ * Busca os dados do perfil do usuário autenticado.
+ * Chama um endpoint privado que requer autenticação.
+ */
 export const getProfile = async (): Promise<UserProfile> => {
-  try {
-    // Usa a instância PRIVADA, que envia os cookies de autenticação.
-    const response = await apiAuth.get<UserProfile>('/users/profile');
-    return response;
-  } catch (error) {
-    console.error('Erro ao obter perfil:', error);
-    throw new Error('Não foi possível obter os dados do utilizador.');
-  }
+  return await connectionAPIGet<UserProfile>(`${API_URL}/auth/profile`);
+};
+
+/**
+ * Realiza o logout do usuário.
+ * Invalida o cookie de autenticação no back-end.
+ */
+export const logout = async (): Promise<void> => {
+  // A função de logout também não retorna dados.
+  await connectionAPIPost<void>(`${API_URL}/auth/logout`, {});
 };
