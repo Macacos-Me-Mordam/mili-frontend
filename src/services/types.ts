@@ -1,3 +1,0 @@
-// Tipos de Autenticação
-
-

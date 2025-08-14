@@ -6,4 +6,4 @@ export enum MethodsEnum {
     PUT = 'put',
 }
 
-export const AUTHORIZATION_KEY = 'AUTHORIZATION_KEY';
+export type MethodType = MethodsEnum.GET | MethodsEnum.POST | MethodsEnum.PUT | MethodsEnum.PATCH | MethodsEnum.DELETE;

@@ -4,7 +4,7 @@ import './globals.css'
 
 import { ThemeProvider } from '@/components/theme-provider'
 import { QueryProvider } from '@/components/query-provider' // 1. Importar
-import { AuthProvider } from '@/contexts/auth-context'    // 2. Importar
+import { AuthProvider } from '@/contexts/auth-provider'    // 2. Importar
 
 const inter = Inter({ subsets: ['latin'] })
 

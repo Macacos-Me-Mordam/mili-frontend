@@ -1,32 +1,15 @@
-// src/services/auth-service.ts
+import { apiPublic, apiPrivate } from '@/lib/ConnectionApi';
+import { LoginCredentials, UserProfile } from '@/model/interfaces/user-data';
 
-import { connectionAPIGet, connectionAPIPost } from "@/lib/ConnectionApi";
-import { LoginCredentials, UserProfile } from "@/model/interfaces/user-data";
 
-const API_URL = 'http://localhost:8080';
-
-/**
- * Realiza o login do usuário.
- * Chama o endpoint público de login.
- */
-export const login = async (credentials: LoginCredentials): Promise<void> => {
-  // A função de login não retorna dados, apenas o cookie de autenticação.
-  await connectionAPIPost<void>(`${API_URL}/auth/login`, credentials);
+export const login = (credentials: LoginCredentials): Promise<UserProfile> => {
+  return apiPublic.post<UserProfile>('/auth/login', credentials);
 };
 
-/**
- * Busca os dados do perfil do usuário autenticado.
- * Chama um endpoint privado que requer autenticação.
- */
-export const getProfile = async (): Promise<UserProfile> => {
-  return await connectionAPIGet<UserProfile>(`${API_URL}/auth/profile`);
+export const logout = (): Promise<void> => {
+  return apiPrivate.post<void>('/auth/logout', {});
 };
 
-/**
- * Realiza o logout do usuário.
- * Invalida o cookie de autenticação no back-end.
- */
-export const logout = async (): Promise<void> => {
-  // A função de logout também não retorna dados.
-  await connectionAPIPost<void>(`${API_URL}/auth/logout`, {});
+export const getProfile = (): Promise<UserProfile> => {
+  return apiPrivate.get<UserProfile>('/users/profile');
 };
