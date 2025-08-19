@@ -1,29 +1,24 @@
+// Interface única e correta para Evidências (camelCase)
 export interface Evidence {
-  id: string; // Uuid  
-  file_path: string;
-  created_at: string; 
-  camera_id: string;
-  occurrence_id: string;
+  id: string;
+  filePath: string;
+  createdAt: string;
+  cameraId: string;
 }
 
-
-export interface PendingOccurrence {
+export interface Occurrence {
   id: string;
   description: string;
-  status: string;
-  created_at: string;
-  camera_name: string;
-  camera_region: string;
+  status: 'processing' | 'resolved' | 'closed';
+  createdAt: string;
+  updatedAt: string;
+  finalizedAt: string | null;
   evidences: Evidence[];
 }
 
-export interface HistoricOccurrence {
-  id: string;
-  description: string;
-  status: string;
-  finalized_at: string;
-}
+export type PendingOccurrence = Occurrence;
+export type HistoricOccurrence = Occurrence;
 
 export interface UpdateOccurrenceStatusPayload {
-    status: 'sucesso' | 'erro'; 
+    status: 'sucesso' | 'erro';
 }

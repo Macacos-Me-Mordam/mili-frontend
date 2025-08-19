@@ -4,14 +4,11 @@ import type { NextRequest } from 'next/server'
 export function middleware(request: NextRequest) {
   const token = request.cookies.get('access_token')?.value
 
-  const privateRoutes = ['/occurrences', '/historic', '/cameras']
+  const privateRoutes = ['/occurrences', '/historic']
 
-  // Verifica se a rota atual é uma das rotas privadas
   const isAccessingPrivateRoute = privateRoutes.some((route) =>
     request.nextUrl.pathname.startsWith(route),
   )
-
-
 
  
   if (!token && isAccessingPrivateRoute) {

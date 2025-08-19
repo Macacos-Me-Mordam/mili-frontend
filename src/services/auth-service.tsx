@@ -1,23 +1,15 @@
-import { api, apiAuth } from '@/lib/api';
+import { apiPublic, apiPrivate } from '@/lib/ConnectionApi';
 import { LoginCredentials, UserProfile } from '@/model/interfaces/user-data';
 
-export const login = async (credentials: LoginCredentials): Promise<void> => {
-  try {
-    // Usa a instância PÚBLICA, pois o utilizador ainda não está autenticado.
-    await api.post('/users/login', { body: credentials });
-  } catch (error) {
-    console.error('Erro no login:', error);
-    throw new Error('Email ou palavra-passe inválidos.');
-  }
+
+export const login = (credentials: LoginCredentials): Promise<UserProfile> => {
+  return apiPublic.post<UserProfile>('/auth/login', credentials);
 };
 
-export const getProfile = async (): Promise<UserProfile> => {
-  try {
-    // Usa a instância PRIVADA, que envia os cookies de autenticação.
-    const response = await apiAuth.get<UserProfile>('/users/profile');
-    return response;
-  } catch (error) {
-    console.error('Erro ao obter perfil:', error);
-    throw new Error('Não foi possível obter os dados do utilizador.');
-  }
+export const logout = (): Promise<void> => {
+  return apiPrivate.post<void>('/auth/logout', {});
+};
+
+export const getProfile = (): Promise<UserProfile> => {
+  return apiPrivate.get<UserProfile>('/users/profile');
 };

@@ -1,10 +1,8 @@
-import { apiAuth } from '@/lib/api';
-import { SettingKey, UpdateSettingPayload } from './types';
-
+import { apiPrivate } from "@/lib/ConnectionApi";
+import { UpdateSettingPayload } from "@/model/interfaces/settings-type";
 
 export const updateSetting = (
-  key: SettingKey,
-  payload: UpdateSettingPayload,
+  payload: UpdateSettingPayload
 ): Promise<void> => {
-  return apiAuth.put(`/settings/${key}`, { body: payload });
+  return apiPrivate.put<void>("/settings/evidence-window", payload);
 };

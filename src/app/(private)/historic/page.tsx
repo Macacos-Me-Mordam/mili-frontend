@@ -1,188 +1,179 @@
-import '@/app/globals.css';
+'use client'
+
+import '@/app/globals.css'
 
 import {
-    Accordion,
-    AccordionContent,
-    AccordionItem,
-    AccordionTrigger,
-} from '@/components/ui/accordion';
-import Image from 'next/image';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from '@/components/ui/accordion'
+import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card'
+import { Badge } from '@/components/ui/badge'
+import { useQuery } from '@tanstack/react-query'
+import { getFailedOccurrences, getSuccessfulOccurrences } from '@/services/occurences-service'
+import { HistoricOccurrence } from '@/model/interfaces/occurrence-type'
+import { Skeleton } from '@/components/ui/skeleton'
+import { AlertTriangle } from 'lucide-react'
 
-const mockOccurrences = [
-    {
-        id: 1,
-        location: 'Portaria Principal',
-        camera: 'Câmera 01',
-        date: '12/06/2025 10:30',
-        imageUrl: 'https://picsum.photos/seed/1/400/300',
-        verified: false,
-    },
-    {
-        id: 2,
-        location: 'Estacionamento - Setor A',
-        camera: 'Câmera 05',
-        date: '12/06/2025 09:45',
-        imageUrl: 'https://picsum.photos/seed/2/400/300',
-        verified: false,
-    },
-    {
-        id: 3,
-        location: 'Refeitório',
-        camera: 'Câmera 08',
-        date: '12/06/2025 08:15',
-        imageUrl: 'https://picsum.photos/seed/3/400/300',
-        verified: false,
-    },
-    {
-        id: 4,
-        location: 'Corredor Administrativo',
-        camera: 'Câmera 03',
-        date: '11/06/2025 18:00',
-        imageUrl: 'https://picsum.photos/seed/4/400/300',
-        verified: true,
-    },
-    {
-        id: 5,
-        location: 'Corredor Administrativo',
-        camera: 'Câmera 03',
-        date: '11/06/2025 18:00',
-        imageUrl: 'https://picsum.photos/seed/4/400/300',
-        verified: true,
-    },
-    {
-        id: 6,
-        location: 'Corredor Administrativo',
-        camera: 'Câmera 03',
-        date: '11/06/2025 18:00',
-        imageUrl: 'https://picsum.photos/seed/4/400/300',
-        verified: true,
-    },
-    {
-        id: 7,
-        location: 'Corredor Administrativo',
-        camera: 'Câmera 03',
-        date: '11/06/2025 18:00',
-        imageUrl: 'https://picsum.photos/seed/4/400/300',
-        verified: false,
-    },
-    {
-        id: 8,
-        location: 'Corredor Administrativo',
-        camera: 'Câmera 03',
-        date: '11/06/2025 18:00',
-        imageUrl: 'https://picsum.photos/seed/4/400/300',
-        verified: false,
-    },
-    {
-        id: 9,
-        location: 'Corredor Administrativo',
-        camera: 'Câmera 03',
-        date: '11/06/2025 18:00',
-        imageUrl: 'https://picsum.photos/seed/4/400/300',
-        verified: false,
-    },
-    {
-        id: 10,
-        location: 'Corredor Administrativo',
-        camera: 'Câmera 03',
-        date: '11/06/2025 18:00',
-        imageUrl: 'https://picsum.photos/seed/4/400/300',
-        verified: true,
-    },
 
-]
-
-function groupOccurrences(data: typeof mockOccurrences) {
-    return {
-        verified: data.filter(item => item.verified),
-        notVerified: data.filter(item => !item.verified),
-    };
+function HistoricCardSkeleton() {
+    return (
+        <div className="h-52 w-60 p-1">
+            <div className="flex flex-col gap-3 p-3">
+                <Skeleton className="h-4 w-3/4" />
+                <Skeleton className="h-4 w-1/2" />
+                <Skeleton className="h-4 w-1/3" />
+                <Skeleton className="h-6 w-24 mt-1" />
+            </div>
+        </div>
+    );
 }
 
-function OccurrenceGrid({ data }: { data: typeof mockOccurrences }) {
+function OccurrenceGrid({ data, isLoading, isError, error, type }: { data: HistoricOccurrence[] | undefined, isLoading: boolean, isError: boolean, error: Error | null, type: 'success' | 'error' }) {
+    if (isLoading) {
+        return (
+            <div className="grid gap-4 auto-cols-fr justify-center [grid-template-columns:repeat(auto-fit,minmax(240px,1fr))]">
+                {Array.from({ length: 3 }).map((_, index) => <HistoricCardSkeleton key={index} />)}
+            </div>
+        );
+    }
+
+    if (isError) {
+        return (
+             <div className="flex flex-col items-center justify-center text-center p-4">
+                <AlertTriangle className="w-12 h-12 text-destructive mb-2" />
+                <h3 className="font-semibold">Falha ao carregar dados</h3>
+                <p className="text-sm text-muted-foreground">{error?.message}</p>
+            </div>
+        )
+    }
+
+    if (!data || data.length === 0) {
+        return <p className="text-sm text-muted-foreground px-4">Nenhuma ocorrência encontrada.</p>
+    }
+
     return (
         <div className="grid gap-4 auto-cols-fr justify-center [grid-template-columns:repeat(auto-fit,minmax(240px,1fr))]">
-            {data.map((occurrence) => (
-                <Card
-                    key={occurrence.id}
-                    className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer h-44 w-60 flex flex-col p-0"
-                >
-                    <CardContent className="p-1">
-                        <div className="flex flex-col gap-1 px-3 py-2">
-                            <div>
+            {data.map((occurrence) => {
+                const firstEvidence = occurrence.evidences?.[0];
+                
+                return (
+                    <Card
+                        key={occurrence.id}
+                        className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer h-52 w-60 flex flex-col p-0"
+                    >
+                        <CardContent className="flex flex-col justify-between flex-1 gap-2 p-3">
+                             <div>
                                 <CardDescription className="text-xs text-muted-foreground mb-0.5">
-                                    Local da Ocorrência
+                                    Descrição
                                 </CardDescription>
-                                <CardTitle className="text-sm font-semibold">
-                                    {occurrence.location}
+                                <CardTitle className="text-sm font-semibold truncate line-clamp-2">
+                                    {occurrence.description}
                                 </CardTitle>
                             </div>
 
                             <div>
                                 <CardDescription className="text-xs text-muted-foreground mb-0.5">
-                                    Nome da Câmera
+                                  ID da Câmera
                                 </CardDescription>
-                                <p className="text-sm font-medium">{occurrence.camera}</p>
+                                {/* CORREÇÃO: Usando cameraId (camelCase) */}
+                                <p className="text-sm font-medium">{firstEvidence?.cameraId || 'N/A'}</p>
                             </div>
-
+                            
                             <div>
                                 <CardDescription className="text-xs text-muted-foreground mb-0.5">
-                                    Data
+                                    Data da Evidência
                                 </CardDescription>
-                                <p className="text-xs text-muted-foreground">{occurrence.date}</p>
+                                <p className="text-xs text-muted-foreground">
+                                    {/* CORREÇÃO: Usando createdAt (camelCase) */}
+                                    {firstEvidence ? new Date(firstEvidence.createdAt).toLocaleString('pt-BR', {
+                                      day: '2-digit',
+                                      month: '2-digit',
+                                      year: 'numeric',
+                                      hour: '2-digit',
+                                      minute: '2-digit'
+                                    }) : 'Data inválida'}
+                                </p>
                             </div>
 
-                            {occurrence.verified ? (
+                            {type === 'success' ? (
                                 <Badge
                                     variant="outline"
-                                    className="border-green-500 text-green-500 text-xs mt-1"
+                                    className="border-green-500 text-green-500 text-xs"
                                 >
                                     <span className="w-2 h-2 mr-1.5 rounded-full bg-green-500" />
-                                    Concluído
+                                    Resolvido
                                 </Badge>
                             ) : (
                                 <Badge
                                     variant="outline"
-                                    className="border-red-500 text-red-500 text-xs mt-1"
+                                    className="border-red-500 text-red-500 text-xs"
                                 >
                                     <span className="w-2 h-2 mr-1.5 rounded-full bg-red-500" />
-                                    Falha
+                                    Fechado
                                 </Badge>
                             )}
-                        </div>
-                    </CardContent>
-                </Card>
-            ))}
+                        </CardContent>
+                    </Card>
+                )
+            })}
         </div>
-
     );
 }
 
-export default function HistoricofCollect() {
-    const { verified, notVerified } = groupOccurrences(mockOccurrences);
+export default function HistoricOfCollect() {
+    const { 
+        data: successfulOccurrences, 
+        isLoading: isLoadingSuccess, 
+        isError: isErrorSuccess,
+        error: errorSuccess
+    } = useQuery({
+        queryKey: ['resolved-occurrences'],
+        queryFn: getSuccessfulOccurrences,
+    });
+
+    const { 
+        data: failedOccurrences, 
+        isLoading: isLoadingFailed, 
+        isError: isErrorFailed,
+        error: errorFailed
+    } = useQuery({
+        queryKey: ['closed-occurrences'],
+        queryFn: getFailedOccurrences,
+    });
+
     return (
         <div className="p-6 space-y-6">
             <h1 className="text-xl font-bold tracking-tight">Histórico de Ocorrências</h1>
 
-            <Accordion type="multiple" className="w-full">
-                <AccordionItem value="verified">
-                    <AccordionTrigger>Ocorrências Verificadas</AccordionTrigger>
+            <Accordion type="multiple" className="w-full" defaultValue={['resolved', 'closed']}>
+                <AccordionItem value="resolved">
+                    <AccordionTrigger>Ocorrências Resolvidas</AccordionTrigger>
                     <AccordionContent>
-                        <OccurrenceGrid data={verified} />
+                        <OccurrenceGrid 
+                            data={successfulOccurrences} 
+                            isLoading={isLoadingSuccess}
+                            isError={isErrorSuccess}
+                            error={errorSuccess as Error | null}
+                            type="success"
+                        />
                     </AccordionContent>
                 </AccordionItem>
 
-                <AccordionItem value="not-verified">
-                    <AccordionTrigger>Ocorrências com Falhas (Não Verificadas)</AccordionTrigger>
+                <AccordionItem value="closed">
+                    <AccordionTrigger>Ocorrências Fechadas</AccordionTrigger>
                     <AccordionContent>
-                        <OccurrenceGrid data={notVerified} />
+                        <OccurrenceGrid 
+                            data={failedOccurrences} 
+                            isLoading={isLoadingFailed}
+                            isError={isErrorFailed}
+                            error={errorFailed as Error | null}
+                            type="error"
+                        />
                     </AccordionContent>
                 </AccordionItem>
             </Accordion>
         </div>
     );
 }
-
-
