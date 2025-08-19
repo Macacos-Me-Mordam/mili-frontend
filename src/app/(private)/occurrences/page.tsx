@@ -92,7 +92,6 @@ export default function OccurrencesPage() {
                       <CardDescription className="text-xs text-muted-foreground mb-0.5">
                         ID da Câmera
                       </CardDescription>
-                       {/* CORREÇÃO: Usando cameraId (camelCase) de dentro da evidência */}
                       <p className="text-sm font-medium">{firstEvidence?.cameraId || 'N/A'}</p>
                     </div>
                     <div>
@@ -100,7 +99,6 @@ export default function OccurrencesPage() {
                         Data
                       </CardDescription>
                       <p className="text-xs text-muted-foreground">
-                        {/* CORREÇÃO: Usando createdAt (camelCase) do objeto principal */}
                         {occurrence.createdAt ? new Date(occurrence.createdAt).toLocaleString('pt-BR', {
                           day: '2-digit',
                           month: '2-digit',
