@@ -1,3 +1,5 @@
+// Caminho: src/model/interfaces/user-data.ts
+
 export interface LoginCredentials {
   email: string;
   password: string;

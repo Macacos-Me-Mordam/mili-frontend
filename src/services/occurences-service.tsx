@@ -6,15 +6,15 @@ import {
 } from "@/model/interfaces/occurrence-type";
 
 export const getPendingOccurrences = (): Promise<PendingOccurrence[]> => {
-  return apiPrivate.get<PendingOccurrence[]>("/occurrences/pending");
+  return apiPrivate.get<PendingOccurrence[]>("/occurrences/processing");
 };
 
 export const getSuccessfulOccurrences = (): Promise<HistoricOccurrence[]> => {
-  return apiPrivate.get<HistoricOccurrence[]>("/occurrences/history/success");
+  return apiPrivate.get<HistoricOccurrence[]>("/occurrences/resolved");
 };
 
 export const getFailedOccurrences = (): Promise<HistoricOccurrence[]> => {
-  return apiPrivate.get<HistoricOccurrence[]>("/occurrences/history/error");
+  return apiPrivate.get<HistoricOccurrence[]>("/occurrences/closed");
 };
 
 export const updateOccurrenceStatus = (

@@ -1,3 +1,5 @@
+// src/lib/ConnectionApi.ts
+
 'use client';
 
 import { ERROR_ACCESS_DANIED, ERROR_CONNECTION } from "@/model/constants/erroStatus";
@@ -18,7 +20,7 @@ async function doFetch<T>(
       method,
       headers,
       body: body ? JSON.stringify(body) : undefined,
-      credentials: isPrivate ? 'include' : 'omit',
+      credentials: 'include', 
     });
 
     if (!res.ok) {
