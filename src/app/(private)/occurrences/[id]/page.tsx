@@ -86,7 +86,7 @@ export default function OccurrenceDetailPage() {
   }
 
   if (!occurrence) {
-     return (
+    return (
       <div className="flex flex-col items-center justify-center h-full p-6 text-center">
         <AlertTriangle className="w-16 h-16 text-yellow-500 mb-4" />
         <h2 className="text-2xl font-bold">Ocorrência não encontrada</h2>

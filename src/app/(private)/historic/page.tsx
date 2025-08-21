@@ -1,7 +1,7 @@
 'use client'
 
 import '@/app/globals.css'
-
+import { useState } from 'react' // Importar useState
 import {
   Accordion,
   AccordionContent,
@@ -11,11 +11,10 @@ import {
 import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { useQuery } from '@tanstack/react-query'
-import { getFailedOccurrences, getSuccessfulOccurrences } from '@/services/occurences-service'
+import { getFailedOccurrences, getSuccessfulOccurrences, downloadOccurrenceProof } from '@/services/occurences-service' 
 import { HistoricOccurrence } from '@/model/interfaces/occurrence-type'
 import { Skeleton } from '@/components/ui/skeleton'
-import { AlertTriangle } from 'lucide-react'
-
+import { AlertTriangle, Loader2 } from 'lucide-react' 
 
 function HistoricCardSkeleton() {
     return (
@@ -31,6 +30,30 @@ function HistoricCardSkeleton() {
 }
 
 function OccurrenceGrid({ data, isLoading, isError, error, type }: { data: HistoricOccurrence[] | undefined, isLoading: boolean, isError: boolean, error: Error | null, type: 'success' | 'error' }) {
+    
+   
+    const [downloadingId, setDownloadingId] = useState<string | null>(null)
+
+    const handleDownload = async (id: string) => {
+        setDownloadingId(id)
+        try {
+            const { blob, filename } = await downloadOccurrenceProof(id)
+            const url = window.URL.createObjectURL(blob)
+            const a = document.createElement('a')
+            a.href = url
+            a.download = filename
+            document.body.appendChild(a)
+            a.click()
+            a.remove()
+            window.URL.revokeObjectURL(url)
+        } catch (err) {
+            console.error("Falha no download:", err)
+            // Adicionar um toast de erro para o usuário aqui seria ideal
+        } finally {
+            setDownloadingId(null)
+        }
+    }
+
     if (isLoading) {
         return (
             <div className="grid gap-4 auto-cols-fr justify-center [grid-template-columns:repeat(auto-fit,minmax(240px,1fr))]">
@@ -56,13 +79,19 @@ function OccurrenceGrid({ data, isLoading, isError, error, type }: { data: Histo
     return (
         <div className="grid gap-4 auto-cols-fr justify-center [grid-template-columns:repeat(auto-fit,minmax(240px,1fr))]">
             {data.map((occurrence) => {
-                const firstEvidence = occurrence.evidences?.[0];
+                const isDownloading = downloadingId === occurrence.id;
                 
                 return (
                     <Card
                         key={occurrence.id}
-                        className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer h-52 w-60 flex flex-col p-0"
+                        onClick={() => !isDownloading && handleDownload(occurrence.id)}
+                        className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer h-52 w-60 flex flex-col p-0 relative"
                     >
+                        {isDownloading && (
+                            <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-10">
+                                <Loader2 className="h-8 w-8 text-white animate-spin" />
+                            </div>
+                        )}
                         <CardContent className="flex flex-col justify-between flex-1 gap-2 p-3">
                              <div>
                                 <CardDescription className="text-xs text-muted-foreground mb-0.5">
@@ -77,8 +106,7 @@ function OccurrenceGrid({ data, isLoading, isError, error, type }: { data: Histo
                                 <CardDescription className="text-xs text-muted-foreground mb-0.5">
                                   ID da Câmera
                                 </CardDescription>
-                                {/* CORREÇÃO: Usando cameraId (camelCase) */}
-                                <p className="text-sm font-medium">{firstEvidence?.cameraId || 'N/A'}</p>
+                                <p className="text-sm font-medium">{occurrence.evidences?.[0]?.cameraId || 'N/A'}</p>
                             </div>
                             
                             <div>
@@ -86,8 +114,7 @@ function OccurrenceGrid({ data, isLoading, isError, error, type }: { data: Histo
                                     Data da Evidência
                                 </CardDescription>
                                 <p className="text-xs text-muted-foreground">
-                                    {/* CORREÇÃO: Usando createdAt (camelCase) */}
-                                    {firstEvidence ? new Date(firstEvidence.createdAt).toLocaleString('pt-BR', {
+                                    {occurrence.evidences?.[0] ? new Date(occurrence.evidences[0].createdAt).toLocaleString('pt-BR', {
                                       day: '2-digit',
                                       month: '2-digit',
                                       year: 'numeric',

@@ -52,7 +52,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     onSuccess: () => {
       queryClient.setQueryData(['user-profile'], null);
       queryClient.removeQueries();
-      router.push('/sign-in');
+      router.push('/landing-page');
     },
   });
 
@@ -76,7 +76,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     if (isProfileError && !isPublic) {
-      router.push('/sign-in');
+      router.push('/landing-page');
     }
 
   }, [isLoadingProfile, isProfileError, user, pathname, router]);

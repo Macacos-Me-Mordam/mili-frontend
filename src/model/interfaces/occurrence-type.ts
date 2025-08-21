@@ -19,6 +19,7 @@ export interface Occurrence {
 export type PendingOccurrence = Occurrence;
 export type HistoricOccurrence = Occurrence;
 
+// Mantemos 'sucesso' | 'erro' aqui para o frontend
 export interface UpdateOccurrenceStatusPayload {
     status: 'sucesso' | 'erro';
 }

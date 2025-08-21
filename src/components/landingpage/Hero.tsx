@@ -1,4 +1,6 @@
 import { RotatingTextPill } from "@/components/landingpage/RotatingTextPill"
+import { FaUser } from 'react-icons/fa'; 
+import Link from 'next/link'
 
 export function Hero() {
   return (
@@ -22,7 +24,6 @@ export function Hero() {
         <div className="max-w-3xl">
           <h1 className="font-extrabold leading-tight text-white text-[clamp(1.75rem,6vw,3.5rem)]">
             Inteligência Artificial{" "}
-            {/* grupo que NUNCA quebra entre 'para um' e o pill */}
             <span className="inline-flex flex-nowrap items-baseline whitespace-nowrap gap-2">
               para um
               <RotatingTextPill
@@ -34,7 +35,6 @@ export function Hero() {
               />
             </span>
           </h1>
-
 
           <p className="mt-4 text-white/90 text-[clamp(1rem,2.5vw,1.25rem)] max-w-xl">
             Detectamos e registramos descartes irregulares em tempo real usando visão
@@ -48,6 +48,14 @@ export function Hero() {
             >
               Ver em ação
             </a>
+          </div>
+
+          {}
+          <div className="absolute top-0 right-4 z-20 transform -translate-y-7 flex items-center space-x-2">
+            <Link href="/sign-in" className="bg-sky-600 text-white p-3 rounded-full shadow-lg flex items-center space-x-2">
+              <FaUser size={20} />
+              <span className="text-sm">Login</span>
+            </Link>
           </div>
         </div>
       </div>
