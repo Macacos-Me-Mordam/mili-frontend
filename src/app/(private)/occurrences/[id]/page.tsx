@@ -44,26 +44,21 @@ export default function OccurrenceDetailPage() {
   const queryClient = useQueryClient()
   const id = Array.isArray(params.id) ? params.id[0] : params.id
 
+  // 1. Buscamos a lista de todas as ocorrências pendentes
   const { data: occurrences, isLoading, isError, error } = useQuery({
     queryKey: ['processing-occurrences'],
     queryFn: getPendingOccurrences,
-    // A query só será executada se o ID existir, o que é uma boa prática
-    enabled: !!id, 
   })
 
+  // 2. Encontramos a ocorrência específica na lista usando o ID da URL
   const occurrence = useMemo(() => {
-    if (!occurrences || !id) return undefined
-    return occurrences.find((o) => o.id === id)
+    return occurrences?.find((o) => o.id === id)
   }, [occurrences, id])
 
   const { mutate: updateStatus, isPending: isUpdatingStatus } = useMutation({
-    mutationFn: ({ status }: { status: 'resolved' | 'closed' }) => {
-      // **CORREÇÃO PRINCIPAL AQUI**
-      // Lançamos um erro se o ID não existir, para a mutação falhar de forma controlada.
-      if (!id) {
-        throw new Error('ID da ocorrência não encontrado para atualização.');
-      }
-      return updateOccurrenceStatus(id, { status })
+    mutationFn: ({ status }: { status: 'sucesso' | 'erro' }) => {
+      if (!id) throw new Error('Occurrence ID is missing');
+      return updateOccurrenceStatus(id, { status });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['processing-occurrences'] })
@@ -72,17 +67,14 @@ export default function OccurrenceDetailPage() {
       router.push('/occurrences')
     },
     onError: (err) => {
-      console.error("Falha ao atualizar o status:", err);
-      // Aqui você poderia adicionar um toast ou alerta de erro para o usuário
+      console.error("Failed to update status:", err);
     }
   })
-  
-  // Verificação inicial para carregar o esqueleto da página
+
   if (isLoading) {
     return <OccurrenceDetailSkeleton />
   }
 
-  // Se houver um ID, mas a busca falhar por outro motivo (ex: erro de conexão)
   if (isError) {
     return (
       <div className="flex flex-col items-center justify-center h-full p-6 text-center">
@@ -93,19 +85,17 @@ export default function OccurrenceDetailPage() {
     )
   }
 
-  // Se o carregamento terminou e a ocorrência específica não foi encontrada na lista
   if (!occurrence) {
      return (
       <div className="flex flex-col items-center justify-center h-full p-6 text-center">
         <AlertTriangle className="w-16 h-16 text-yellow-500 mb-4" />
         <h2 className="text-2xl font-bold">Ocorrência não encontrada</h2>
-        <p className="text-muted-foreground">Pode já ter sido processada ou o ID é inválido.</p>
+        <p className="text-muted-foreground">Não foi possível encontrar os detalhes para esta ocorrência.</p>
          <Button onClick={() => router.push('/occurrences')} className="mt-4">Voltar</Button>
       </div>
     )
   }
 
-  // A partir daqui, temos certeza que `occurrence` existe.
   return (
     <div className="p-6 space-y-6">
       <h1 className="text-xl font-bold tracking-tight">Detalhes da Ocorrência</h1>
@@ -165,7 +155,7 @@ export default function OccurrenceDetailPage() {
 
       <div className="flex gap-4">
         <Button
-          onClick={() => updateStatus({ status: 'resolved' })}
+          onClick={() => updateStatus({ status: 'sucesso' })}
           disabled={isUpdatingStatus}
           className="bg-green-600 hover:bg-green-700"
         >
@@ -174,7 +164,7 @@ export default function OccurrenceDetailPage() {
         </Button>
         <Button
           variant="destructive"
-          onClick={() => updateStatus({ status: 'closed' })}
+          onClick={() => updateStatus({ status: 'erro' })}
           disabled={isUpdatingStatus}
         >
           <X className="mr-2 h-4 w-4" />
