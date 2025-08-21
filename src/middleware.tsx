@@ -4,7 +4,7 @@ import type { NextRequest } from 'next/server'
 export function middleware(request: NextRequest) {
   const token = request.cookies.get('access_token')?.value
 
-  const privateRoutes = ['/occurrences', '/historic']
+  const privateRoutes = ['/occurrences', '/historic', '/app-occurrences', '/historic-app']
 
   const isAccessingPrivateRoute = privateRoutes.some((route) =>
     request.nextUrl.pathname.startsWith(route),
@@ -27,6 +27,8 @@ export const config = {
   matcher: [
     '/occurrences/:path*',
     '/historic/:path*',
+    '/app-occurrences/:path*',
+    '/historic-app/:path*',
     '/cameras/:path*',
     '/sign-in',
   ],
