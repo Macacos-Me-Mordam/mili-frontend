@@ -9,6 +9,7 @@ import {
 } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import Image from 'next/image'
+import Link from 'next/link' // Importar o Link
 import { useQuery } from '@tanstack/react-query'
 import { getPendingOccurrences } from '@/services/occurences-service'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -64,61 +65,62 @@ export default function OccurrencesPage() {
               const firstEvidence = occurrence.evidences?.[0];
 
               return (
-                <Card
-                  key={occurrence.id}
-                  className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer h-80 w-60 flex flex-col"
-                >
-                  <CardHeader className="p-0">
-                    <div className="relative w-full h-20">
-                      {/* CORREÇÃO: Usando filePath (camelCase) */}
-                      <Image
-                        src={firstEvidence?.filePath || 'https://picsum.photos/400/300'}
-                        alt={`Ocorrência: ${occurrence.description}`}
-                        layout="fill"
-                        objectFit="cover"
-                      />
-                    </div>
-                  </CardHeader>
-                  <CardContent className="flex flex-col justify-between flex-1 gap-2 p-3">
-                    <div>
-                      <CardDescription className="text-xs text-muted-foreground mb-0.5">
-                        Descrição
-                      </CardDescription>
-                      <CardTitle className="text-sm font-semibold line-clamp-2">
-                        {occurrence.description}
-                      </CardTitle>
-                    </div>
-                    <div>
-                      <CardDescription className="text-xs text-muted-foreground mb-0.5">
-                        ID da Câmera
-                      </CardDescription>
-                      <p className="text-sm font-medium">{firstEvidence?.cameraId || 'N/A'}</p>
-                    </div>
-                    <div>
-                      <CardDescription className="text-xs text-muted-foreground mb-0.5">
-                        Data
-                      </CardDescription>
-                      <p className="text-xs text-muted-foreground">
-                        {occurrence.createdAt ? new Date(occurrence.createdAt).toLocaleString('pt-BR', {
-                          day: '2-digit',
-                          month: '2-digit',
-                          year: 'numeric',
-                          hour: '2-digit',
-                          minute: '2-digit'
-                        }) : 'Data inválida'}
-                      </p>
-                    </div>
-                    {occurrence.status === 'processing' && (
-                      <Badge
-                        variant="outline"
-                        className="border-orange-500 text-orange-500 text-xs mt-1"
-                      >
-                        <span className="w-2 h-2 mr-1.5 rounded-full bg-orange-500"></span>
-                        Não Verificado
-                      </Badge>
-                    )}
-                  </CardContent>
-                </Card>
+                // Envolver o Card com o componente Link
+                <Link key={occurrence.id} href={`/occurrences/${occurrence.id}`} passHref>
+                  <Card
+                    className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer h-80 w-60 flex flex-col"
+                  >
+                    <CardHeader className="p-0">
+                      <div className="relative w-full h-20">
+                        <Image
+                          src={firstEvidence?.filePath || 'https://picsum.photos/400/300'}
+                          alt={`Ocorrência: ${occurrence.description}`}
+                          layout="fill"
+                          objectFit="cover"
+                        />
+                      </div>
+                    </CardHeader>
+                    <CardContent className="flex flex-col justify-between flex-1 gap-2 p-3">
+                      <div>
+                        <CardDescription className="text-xs text-muted-foreground mb-0.5">
+                          Descrição
+                        </CardDescription>
+                        <CardTitle className="text-sm font-semibold line-clamp-2">
+                          {occurrence.description}
+                        </CardTitle>
+                      </div>
+                      <div>
+                        <CardDescription className="text-xs text-muted-foreground mb-0.5">
+                          ID da Câmera
+                        </CardDescription>
+                        <p className="text-sm font-medium">{firstEvidence?.cameraId || 'N/A'}</p>
+                      </div>
+                      <div>
+                        <CardDescription className="text-xs text-muted-foreground mb-0.5">
+                          Data
+                        </CardDescription>
+                        <p className="text-xs text-muted-foreground">
+                          {occurrence.createdAt ? new Date(occurrence.createdAt).toLocaleString('pt-BR', {
+                            day: '2-digit',
+                            month: '2-digit',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                          }) : 'Data inválida'}
+                        </p>
+                      </div>
+                      {occurrence.status === 'processing' && (
+                        <Badge
+                          variant="outline"
+                          className="border-orange-500 text-orange-500 text-xs mt-1"
+                        >
+                          <span className="w-2 h-2 mr-1.5 rounded-full bg-orange-500"></span>
+                          Não Verificado
+                        </Badge>
+                      )}
+                    </CardContent>
+                  </Card>
+                </Link>
               )
             })}
       </div>
