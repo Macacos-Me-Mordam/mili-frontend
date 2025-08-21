@@ -65,20 +65,11 @@ export default function OccurrencesPage() {
               const firstEvidence = occurrence.evidences?.[0];
 
               return (
-                // Envolver o Card com o componente Link
                 <Link key={occurrence.id} href={`/occurrences/${occurrence.id}`} passHref>
                   <Card
-                    className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer h-80 w-60 flex flex-col"
+                    className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer h-52 w-60 flex flex-col p-0"
                   >
                     <CardHeader className="p-0">
-                      <div className="relative w-full h-20">
-                        <Image
-                          src={firstEvidence?.filePath || 'https://picsum.photos/400/300'}
-                          alt={`Ocorrência: ${occurrence.description}`}
-                          layout="fill"
-                          objectFit="cover"
-                        />
-                      </div>
                     </CardHeader>
                     <CardContent className="flex flex-col justify-between flex-1 gap-2 p-3">
                       <div>

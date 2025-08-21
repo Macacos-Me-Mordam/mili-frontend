@@ -1,11 +1,9 @@
-// src/components/commom/app-sidebar.tsx
-
 'use client'
 import {
   Video,
-  Camera,
   History,
   LogOutIcon,
+  Smartphone, // Ícone importado para a nova rota
 } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -19,7 +17,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from '@/components/ui/sidebar'
-import { useAuth } from '@/contexts/auth-provider' 
+import { useAuth } from '@/contexts/auth-provider'
 import { Skeleton } from '../ui/skeleton'
 
 
@@ -27,9 +25,14 @@ const navItems = [
   {
     href: '/occurrences',
     icon: Video,
-    label: 'Ocorrências',
+    label: 'Ocorrências (Câmaras)',
   },
-
+  // Rota adicionada para as ocorrências da aplicação
+  {
+    href: '/app-occurrences',
+    icon: Smartphone,
+    label: 'Ocorrências (App)',
+  },
   {
     href: '/historic',
     icon: History,

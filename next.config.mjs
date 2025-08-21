@@ -1,11 +1,16 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Adicionamos a configuração de imagens aqui
   images: {
     remotePatterns: [
       {
         protocol: 'https',
         hostname: 'picsum.photos',
+        port: '',
+        pathname: '/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'exemplo.com', // Domínio do erro
         port: '',
         pathname: '/**',
       },
@@ -17,7 +22,6 @@ const nextConfig = {
       {
         source: '/api/:path*',
         destination: 'http://localhost:3000/:path*',
-
       },
     ];
   },
