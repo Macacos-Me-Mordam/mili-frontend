@@ -52,7 +52,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     onSuccess: () => {
       queryClient.setQueryData(['user-profile'], null);
       queryClient.removeQueries();
-      router.push('/sign-in');
+      router.push('/landing-page');
     },
   });
 
@@ -72,11 +72,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const isPublic = PUBLIC_PATHS.includes(pathname);
     
     if (user && isPublic) {
-      router.push('/occurrences');
+      router.push('/ocurrences');
     }
 
     if (isProfileError && !isPublic) {
-      router.push('/sign-in');
+      router.push('/landing-page');
     }
 
   }, [isLoadingProfile, isProfileError, user, pathname, router]);

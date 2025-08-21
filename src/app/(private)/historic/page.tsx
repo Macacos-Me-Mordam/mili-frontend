@@ -86,7 +86,7 @@ function OccurrenceGrid({ data, isLoading, isError, error, type }: { data: Histo
                                     Data da Evidência
                                 </CardDescription>
                                 <p className="text-xs text-muted-foreground">
-                                    {/* CORREÇÃO: Usando createdAt (camelCase) */}
+                                    {}
                                     {firstEvidence ? new Date(firstEvidence.createdAt).toLocaleString('pt-BR', {
                                       day: '2-digit',
                                       month: '2-digit',
