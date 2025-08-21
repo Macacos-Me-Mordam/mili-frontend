@@ -44,23 +44,21 @@ export default function OccurrenceDetailPage() {
   const queryClient = useQueryClient()
   const id = Array.isArray(params.id) ? params.id[0] : params.id
 
+  // 1. Buscamos a lista de todas as ocorrências pendentes
   const { data: occurrences, isLoading, isError, error } = useQuery({
     queryKey: ['processing-occurrences'],
     queryFn: getPendingOccurrences,
-    enabled: !!id,
   })
 
+  // 2. Encontramos a ocorrência específica na lista usando o ID da URL
   const occurrence = useMemo(() => {
-    if (!occurrences || !id) return undefined
-    return occurrences.find((o) => o.id === id)
+    return occurrences?.find((o) => o.id === id)
   }, [occurrences, id])
 
   const { mutate: updateStatus, isPending: isUpdatingStatus } = useMutation({
-    mutationFn: (status: 'sucesso' | 'erro') => {
-      if (!id) {
-        throw new Error('ID da ocorrência não encontrado para atualização.');
-      }
-      return updateOccurrenceStatus(id, { status })
+    mutationFn: ({ status }: { status: 'sucesso' | 'erro' }) => {
+      if (!id) throw new Error('Occurrence ID is missing');
+      return updateOccurrenceStatus(id, { status });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['processing-occurrences'] })
@@ -69,7 +67,7 @@ export default function OccurrenceDetailPage() {
       router.push('/occurrences')
     },
     onError: (err) => {
-      console.error("Falha ao atualizar o status:", err);
+      console.error("Failed to update status:", err);
     }
   })
 
@@ -92,8 +90,8 @@ export default function OccurrenceDetailPage() {
       <div className="flex flex-col items-center justify-center h-full p-6 text-center">
         <AlertTriangle className="w-16 h-16 text-yellow-500 mb-4" />
         <h2 className="text-2xl font-bold">Ocorrência não encontrada</h2>
-        <p className="text-muted-foreground">Pode já ter sido processada ou o ID é inválido.</p>
-        <Button onClick={() => router.push('/occurrences')} className="mt-4">Voltar</Button>
+        <p className="text-muted-foreground">Não foi possível encontrar os detalhes para esta ocorrência.</p>
+         <Button onClick={() => router.push('/occurrences')} className="mt-4">Voltar</Button>
       </div>
     )
   }
@@ -157,7 +155,7 @@ export default function OccurrenceDetailPage() {
 
       <div className="flex gap-4">
         <Button
-          onClick={() => updateStatus('sucesso')}
+          onClick={() => updateStatus({ status: 'sucesso' })}
           disabled={isUpdatingStatus}
           className="bg-green-600 hover:bg-green-700"
         >
@@ -166,7 +164,7 @@ export default function OccurrenceDetailPage() {
         </Button>
         <Button
           variant="destructive"
-          onClick={() => updateStatus('erro')}
+          onClick={() => updateStatus({ status: 'erro' })}
           disabled={isUpdatingStatus}
         >
           <X className="mr-2 h-4 w-4" />
