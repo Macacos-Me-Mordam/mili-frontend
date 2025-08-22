@@ -72,7 +72,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const isPublic = PUBLIC_PATHS.includes(pathname);
     
     if (user && isPublic) {
-      router.push('/ocurrences');
+      router.push('/occurrences');
     }
 
     if (isProfileError && !isPublic) {

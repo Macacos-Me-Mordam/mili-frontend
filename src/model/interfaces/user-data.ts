@@ -1,5 +1,3 @@
-// Caminho: src/model/interfaces/user-data.ts
-
 export interface LoginCredentials {
   email: string;
   password: string;
@@ -11,4 +9,11 @@ export interface UserProfile {
   email: string;
   role: string;
   created_at: string;
+}
+
+export interface NewUserPayload {
+  name: string;
+  email: string;
+  password: string;
+  roles?: string[]; 
 }
