@@ -25,7 +25,7 @@ function AppOccurrenceDetailSkeleton() {
           <Skeleton className="h-4 w-1/2" />
         </div>
       </div>
-      <Skeleton className="aspect-video w-full rounded-md" />
+      <Skeleton className="aspect-square w-full rounded-md" />
       <div className="flex gap-4">
         <Skeleton className="h-10 w-24" />
         <Skeleton className="h-10 w-24" />
@@ -132,7 +132,7 @@ export default function AppOccurrenceDetailPage() {
         </CardHeader>
         <CardContent>
           {occurrence.photoUrl ? (
-            <div className="relative aspect-video w-full">
+            <div className="relative aspect-square w-full max-w-md mx-auto">
               <Image
                 src={occurrence.photoUrl}
                 alt="Foto da ocorrência"

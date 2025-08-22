@@ -26,7 +26,7 @@ const navItems = [
   {
     href: '/occurrences',
     icon: Video,
-    label: 'Ocorrências (Câmaras)',
+    label: 'Ocorrências (Câmeras)',
   },
   {
     href: '/app-occurrences',
@@ -36,9 +36,8 @@ const navItems = [
   {
     href: '/historic',
     icon: History,
-    label: 'Histórico (Câmaras)',
+    label: 'Histórico (Câmeras)',
   },
-  // Nova rota para o histórico do app
   {
     href: '/historic-app',
     icon: FileClock,

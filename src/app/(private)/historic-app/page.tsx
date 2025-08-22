@@ -1,6 +1,7 @@
 'use client'
 
 import '@/app/globals.css'
+import { useState } from 'react'
 import {
   Accordion,
   AccordionContent,
@@ -10,10 +11,10 @@ import {
 import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { useQuery } from '@tanstack/react-query'
-import { getClosedAppOccurrences, getResolvedAppOccurrences } from '@/services/app-occurrence-services'
+import { getClosedAppOccurrences, getResolvedAppOccurrences, downloadAppOccurrenceProof } from '@/services/app-occurrence-services'
 import { AppOccurrence } from '@/model/interfaces/app-occurrence-types'
 import { Skeleton } from '@/components/ui/skeleton'
-import { AlertTriangle } from 'lucide-react'
+import { AlertTriangle, Loader2 } from 'lucide-react'
 
 function HistoricCardSkeleton() {
     return (
@@ -29,6 +30,27 @@ function HistoricCardSkeleton() {
 }
 
 function AppOccurrenceGrid({ data, isLoading, isError, error, type }: { data: AppOccurrence[] | undefined, isLoading: boolean, isError: boolean, error: Error | null, type: 'success' | 'error' }) {
+    const [downloadingId, setDownloadingId] = useState<string | null>(null);
+
+    const handleDownload = async (id: string) => {
+        setDownloadingId(id);
+        try {
+            const { blob, filename } = await downloadAppOccurrenceProof(id);
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url);
+        } catch (err) {
+            console.error("Falha no download:", err);
+            // Idealmente, mostrar um toast de erro para o usuário
+        } finally {
+            setDownloadingId(null);
+        }
+    };
 
     if (isLoading) {
         return (
@@ -54,11 +76,19 @@ function AppOccurrenceGrid({ data, isLoading, isError, error, type }: { data: Ap
 
     return (
         <div className="grid gap-4 auto-cols-fr justify-center [grid-template-columns:repeat(auto-fit,minmax(240px,1fr))]">
-            {data.map((occurrence) => (
+            {data.map((occurrence) => {
+                const isDownloading = downloadingId === occurrence.id;
+                return (
                     <Card
                         key={occurrence.id}
-                        className="overflow-hidden hover:shadow-lg transition-shadow h-52 w-60 flex flex-col p-0"
+                        onClick={() => !isDownloading && handleDownload(occurrence.id)}
+                        className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer h-52 w-60 flex flex-col p-0 relative"
                     >
+                        {isDownloading && (
+                            <div className="absolute inset-0 bg-black/50 flex items-center justify-center z-10">
+                                <Loader2 className="h-8 w-8 text-white animate-spin" />
+                            </div>
+                        )}
                         <CardContent className="flex flex-col justify-between flex-1 gap-2 p-3">
                              <div>
                                 <CardDescription className="text-xs text-muted-foreground mb-0.5">
@@ -111,7 +141,7 @@ function AppOccurrenceGrid({ data, isLoading, isError, error, type }: { data: Ap
                         </CardContent>
                     </Card>
                 )
-            )}
+            })}
         </div>
     );
 }

@@ -30,22 +30,6 @@ export const deleteAppOccurrence = (id: string): Promise<void> => {
   return apiPrivate.delete<void>(`/app-occurrence/${id}`);
 };
 
-export const downloadAppOccurrenceProof = async (id: string): Promise<void> => {
-  const response = await fetch(`http://localhost:8080/app-occurrence/${id}/download`, {
-    credentials: 'include',
-  });
-
-  if (!response.ok) {
-    throw new Error('Falha ao descarregar o comprovativo.');
-  }
-
-  const blob = await response.blob();
-  const url = window.URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `comprovativo-ocorrencia-${id}.pdf`;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  window.URL.revokeObjectURL(url);
+export const downloadAppOccurrenceProof = (id: string): Promise<{ blob: Blob; filename: string }> => {
+  return apiPrivate.download(`/app-occurrence/${id}/download`);
 };
