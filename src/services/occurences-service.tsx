@@ -3,6 +3,7 @@ import {
   HistoricOccurrence,
   PendingOccurrence,
   UpdateOccurrenceStatusPayload,
+  Occurrence,
 } from "@/model/interfaces/occurrence-type";
 
 export const getPendingOccurrences = (): Promise<PendingOccurrence[]> => {
@@ -21,9 +22,18 @@ export const updateOccurrenceStatus = (
   id: string,
   payload: UpdateOccurrenceStatusPayload
 ): Promise<void> => {
-  return apiPrivate.put<void>(`/occurrences/${id}/status`, payload);
+  const body = {
+    id: id,
+    status: payload.status === 'sucesso' ? 'resolved' : 'closed',
+  };
+  return apiPrivate.put<void>(`/occurrences`, body);
 };
 
 export const deleteOccurrence = (id: string): Promise<void> => {
   return apiPrivate.delete<void>(`/occurrences/${id}`);
+};
+
+// NOVA FUNÇÃO DE DOWNLOAD
+export const downloadOccurrenceProof = (id: string): Promise<{ blob: Blob; filename: string }> => {
+  return apiPrivate.download(`/occurrences/${id}/download`);
 };

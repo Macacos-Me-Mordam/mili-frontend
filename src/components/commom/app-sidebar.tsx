@@ -3,6 +3,8 @@ import {
   Video,
   History,
   LogOutIcon,
+  Smartphone,
+  FileClock, // Novo ícone
 } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -25,13 +27,22 @@ const navItems = [
   {
     href: '/occurrences',
     icon: Video,
-    label: 'Ocorrências',
+    label: 'Ocorrências (Câmeras)',
   },
-
+  {
+    href: '/app-occurrences',
+    icon: Smartphone,
+    label: 'Ocorrências (App)',
+  },
   {
     href: '/historic',
     icon: History,
-    label: 'Histórico',
+    label: 'Histórico (Câmeras)',
+  },
+  {
+    href: '/historic-app',
+    icon: FileClock,
+    label: 'Histórico (App)',
   },
 
   {

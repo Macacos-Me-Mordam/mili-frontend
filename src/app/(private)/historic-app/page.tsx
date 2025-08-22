@@ -1,7 +1,7 @@
 'use client'
 
 import '@/app/globals.css'
-import { useState } from 'react' // Importar useState
+import { useState } from 'react'
 import {
   Accordion,
   AccordionContent,
@@ -11,10 +11,10 @@ import {
 import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { useQuery } from '@tanstack/react-query'
-import { getFailedOccurrences, getSuccessfulOccurrences, downloadOccurrenceProof } from '@/services/occurences-service' 
-import { HistoricOccurrence } from '@/model/interfaces/occurrence-type'
+import { getClosedAppOccurrences, getResolvedAppOccurrences, downloadAppOccurrenceProof } from '@/services/app-occurrence-services'
+import { AppOccurrence } from '@/model/interfaces/app-occurrence-types'
 import { Skeleton } from '@/components/ui/skeleton'
-import { AlertTriangle, Loader2 } from 'lucide-react' 
+import { AlertTriangle, Loader2 } from 'lucide-react'
 
 function HistoricCardSkeleton() {
     return (
@@ -29,30 +29,28 @@ function HistoricCardSkeleton() {
     );
 }
 
-function OccurrenceGrid({ data, isLoading, isError, error, type }: { data: HistoricOccurrence[] | undefined, isLoading: boolean, isError: boolean, error: Error | null, type: 'success' | 'error' }) {
-    
-   
-    const [downloadingId, setDownloadingId] = useState<string | null>(null)
+function AppOccurrenceGrid({ data, isLoading, isError, error, type }: { data: AppOccurrence[] | undefined, isLoading: boolean, isError: boolean, error: Error | null, type: 'success' | 'error' }) {
+    const [downloadingId, setDownloadingId] = useState<string | null>(null);
 
     const handleDownload = async (id: string) => {
-        setDownloadingId(id)
+        setDownloadingId(id);
         try {
-            const { blob, filename } = await downloadOccurrenceProof(id)
-            const url = window.URL.createObjectURL(blob)
-            const a = document.createElement('a')
-            a.href = url
-            a.download = filename
-            document.body.appendChild(a)
-            a.click()
-            a.remove()
-            window.URL.revokeObjectURL(url)
+            const { blob, filename } = await downloadAppOccurrenceProof(id);
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            window.URL.revokeObjectURL(url);
         } catch (err) {
-            console.error("Falha no download:", err)
-            // Adicionar um toast de erro para o usuário aqui seria ideal
+            console.error("Falha no download:", err);
+            // Idealmente, mostrar um toast de erro para o usuário
         } finally {
-            setDownloadingId(null)
+            setDownloadingId(null);
         }
-    }
+    };
 
     if (isLoading) {
         return (
@@ -80,7 +78,6 @@ function OccurrenceGrid({ data, isLoading, isError, error, type }: { data: Histo
         <div className="grid gap-4 auto-cols-fr justify-center [grid-template-columns:repeat(auto-fit,minmax(240px,1fr))]">
             {data.map((occurrence) => {
                 const isDownloading = downloadingId === occurrence.id;
-                
                 return (
                     <Card
                         key={occurrence.id}
@@ -104,17 +101,17 @@ function OccurrenceGrid({ data, isLoading, isError, error, type }: { data: Histo
 
                             <div>
                                 <CardDescription className="text-xs text-muted-foreground mb-0.5">
-                                  ID da Câmera
+                                  Endereço
                                 </CardDescription>
-                                <p className="text-sm font-medium">{occurrence.evidences?.[0]?.cameraId || 'N/A'}</p>
+                                <p className="text-sm font-medium">{occurrence.address}</p>
                             </div>
                             
                             <div>
                                 <CardDescription className="text-xs text-muted-foreground mb-0.5">
-                                    Data da Evidência
+                                    Data da Finalização
                                 </CardDescription>
                                 <p className="text-xs text-muted-foreground">
-                                    {occurrence.evidences?.[0] ? new Date(occurrence.evidences[0].createdAt).toLocaleString('pt-BR', {
+                                    {occurrence.finalizedAt ? new Date(occurrence.finalizedAt).toLocaleString('pt-BR', {
                                       day: '2-digit',
                                       month: '2-digit',
                                       year: 'numeric',
@@ -149,15 +146,15 @@ function OccurrenceGrid({ data, isLoading, isError, error, type }: { data: Histo
     );
 }
 
-export default function HistoricOfCollect() {
+export default function HistoricOfApp() {
     const { 
         data: successfulOccurrences, 
         isLoading: isLoadingSuccess, 
         isError: isErrorSuccess,
         error: errorSuccess
     } = useQuery({
-        queryKey: ['resolved-occurrences'],
-        queryFn: getSuccessfulOccurrences,
+        queryKey: ['resolved-app-occurrences'],
+        queryFn: getResolvedAppOccurrences,
     });
 
     const { 
@@ -166,19 +163,19 @@ export default function HistoricOfCollect() {
         isError: isErrorFailed,
         error: errorFailed
     } = useQuery({
-        queryKey: ['closed-occurrences'],
-        queryFn: getFailedOccurrences,
+        queryKey: ['closed-app-occurrences'],
+        queryFn: getClosedAppOccurrences,
     });
 
     return (
         <div className="p-6 space-y-6">
-            <h1 className="text-xl font-bold tracking-tight">Histórico de Ocorrências</h1>
+            <h1 className="text-xl font-bold tracking-tight">Histórico de Ocorrências do App</h1>
 
             <Accordion type="multiple" className="w-full" defaultValue={['resolved', 'closed']}>
                 <AccordionItem value="resolved">
                     <AccordionTrigger>Ocorrências Resolvidas</AccordionTrigger>
                     <AccordionContent>
-                        <OccurrenceGrid 
+                        <AppOccurrenceGrid 
                             data={successfulOccurrences} 
                             isLoading={isLoadingSuccess}
                             isError={isErrorSuccess}
@@ -191,7 +188,7 @@ export default function HistoricOfCollect() {
                 <AccordionItem value="closed">
                     <AccordionTrigger>Ocorrências Fechadas</AccordionTrigger>
                     <AccordionContent>
-                        <OccurrenceGrid 
+                        <AppOccurrenceGrid 
                             data={failedOccurrences} 
                             isLoading={isLoadingFailed}
                             isError={isErrorFailed}
