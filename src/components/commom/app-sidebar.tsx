@@ -1,10 +1,12 @@
+// src/components/commom/app-sidebar.tsx
 'use client'
 import {
   Video,
   History,
   LogOutIcon,
   Smartphone,
-  FileClock, // Novo ícone
+  FileClock,
+  Settings, // Novo ícone
 } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -43,6 +45,12 @@ const navItems = [
     icon: FileClock,
     label: 'Histórico (App)',
   },
+  // Novo item de navegação
+  {
+    href: '/settings',
+    icon: Settings,
+    label: 'Configurações',
+  }
 ]
 
 export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {

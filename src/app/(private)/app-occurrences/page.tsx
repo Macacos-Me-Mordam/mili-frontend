@@ -1,3 +1,4 @@
+// O código para esta página permanece o mesmo, pois o espaçamento já é consistente.
 'use client'
 
 import {
