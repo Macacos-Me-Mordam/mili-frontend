@@ -68,8 +68,7 @@ export default function OccurrencesPage() {
               <Card
                 className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer h-52 w-60 flex flex-col p-0"
               >
-                <CardContent className="flex flex-col justify-between flex-1 p-3">
-                  <div className="space-y-3">
+                <CardContent className="flex flex-col justify-between flex-1 p-3 gap-2">
                     <div>
                       <CardDescription className="text-xs text-muted-foreground mb-0.5">
                         Descrição
@@ -98,7 +97,6 @@ export default function OccurrencesPage() {
                         }) : 'Data inválida'}
                       </p>
                     </div>
-                  </div>
                   <Badge
                       variant="outline"
                       className="border-orange-500 text-orange-500 text-xs">

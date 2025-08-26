@@ -1,5 +1,10 @@
-// Caminho: src/model/interfaces/settings-type.ts
+// src/model/interfaces/settings-type.ts
 
 export interface UpdateSettingPayload {
-  windowSeconds: string;
+  windowSeconds: number;
+}
+
+// Novo: Interface para a resposta do GET
+export interface EvidenceWindowPayload {
+  windowSeconds: number;
 }

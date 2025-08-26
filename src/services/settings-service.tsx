@@ -1,5 +1,12 @@
+// src/services/settings-service.tsx
+
 import { apiPrivate } from "@/lib/ConnectionApi";
-import { UpdateSettingPayload } from "@/model/interfaces/settings-type";
+import { UpdateSettingPayload, EvidenceWindowPayload } from "@/model/interfaces/settings-type";
+
+// Função para buscar a configuração atual
+export const getEvidenceWindow = (): Promise<EvidenceWindowPayload> => {
+  return apiPrivate.get<EvidenceWindowPayload>("/settings/evidence-window");
+};
 
 export const updateSetting = (
   payload: UpdateSettingPayload

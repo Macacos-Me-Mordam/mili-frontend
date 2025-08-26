@@ -72,9 +72,13 @@ async function doFetch<T>(
       }
       throw new Error(`HTTP error! Status: ${res.status}`);
     }
-
-    if (res.status === 204) {
-      return undefined as unknown as T;
+    
+    // CORREÇÃO: Verifica se a resposta não tem corpo antes de tentar o .json()
+    const contentType = res.headers.get("content-type");
+    const contentLength = res.headers.get("content-length");
+    
+    if (contentLength === '0' || (contentType && !contentType.includes('application/json'))) {
+        return undefined as unknown as T;
     }
 
     return (await res.json()) as T;
