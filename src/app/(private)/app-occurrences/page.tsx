@@ -1,17 +1,7 @@
+// src/app/(private)/app-occurrences/page.tsx
 'use client'
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from '@/components/ui/accordion'
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardTitle,
-} from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import Link from 'next/link'
 import { useQuery } from '@tanstack/react-query'
@@ -23,7 +13,7 @@ function AppOccurrenceCardSkeleton() {
   return (
     <div className="h-52 w-60 p-1">
         <div className="flex flex-col gap-3 p-3">
-            <Skeleton className="h-4 w-3/4" />
+            <Skeleton className="h-4 w-3-4" />
             <Skeleton className="h-4 w-1/2" />
             <Skeleton className="h-4 w-1/3" />
             <Skeleton className="h-6 w-24 mt-1" />
@@ -43,7 +33,7 @@ export default function AppOccurrencesPage() {
     queryFn: getProcessingAppOccurrences,
   })
 
-  const renderGrid = () => {
+  const renderContent = () => {
     if (isLoading) {
       return (
         <div className="grid gap-4 auto-cols-fr justify-center [grid-template-columns:repeat(auto-fit,minmax(240px,1fr))]">
@@ -52,6 +42,16 @@ export default function AppOccurrencesPage() {
           ))}
         </div>
       )
+    }
+    
+    if (isError) {
+        return (
+          <div className="flex flex-col items-center justify-center text-center p-4">
+            <AlertTriangle className="w-12 h-12 text-destructive mb-2" />
+            <h3 className="font-semibold">Falha ao carregar ocorrências do app</h3>
+            <p className="text-sm text-muted-foreground">{error?.message}</p>
+          </div>
+        )
     }
 
     if (!occurrences || occurrences.length === 0) {
@@ -109,30 +109,12 @@ export default function AppOccurrencesPage() {
     )
   }
 
-  if (isError) {
-    return (
-      <div className="flex flex-col items-center justify-center h-full p-6 text-center">
-        <AlertTriangle className="w-16 h-16 text-destructive mb-4" />
-        <h2 className="text-2xl font-bold">Falha ao carregar ocorrências do app</h2>
-        <p className="text-muted-foreground max-w-sm">
-          Não foi possível buscar os dados. Verifique sua conexão ou tente novamente.
-        </p>
-        <pre className="mt-4 text-xs bg-muted p-2 rounded-md">{error.message}</pre>
-      </div>
-    )
-  }
-
   return (
     <div className="p-6 space-y-6">
-      <h1 className="text-xl font-bold tracking-tight">Ocorrências (App)</h1>
-      <Accordion type="single" collapsible className="w-full" defaultValue="pending">
-        <AccordionItem value="pending">
-          <AccordionTrigger>Ocorrências Pendentes</AccordionTrigger>
-          <AccordionContent>
-            {renderGrid()}
-          </AccordionContent>
-        </AccordionItem>
-      </Accordion>
+      <h1 className="text-xl font-bold tracking-tight">Ocorrências Pendentes (App)</h1>
+      <div className="space-y-4">
+          {renderContent()}
+      </div>
     </div>
   )
 }

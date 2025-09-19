@@ -40,7 +40,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     mutationFn: login,
     onSuccess: (data) => {
       queryClient.setQueryData(['user-profile'], data);
-      router.push('/occurrences');
+      router.push('/menu'); // ALTERADO AQUI
     },
     onError: (error) => {
       console.error("Login failed:", error.message);
@@ -72,7 +72,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const isPublic = PUBLIC_PATHS.includes(pathname);
     
     if (user && isPublic) {
-      router.push('/occurrences');
+      router.push('/menu'); // ALTERADO AQUI
     }
 
     if (isProfileError && !isPublic) {

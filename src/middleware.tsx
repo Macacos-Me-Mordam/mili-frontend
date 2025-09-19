@@ -4,7 +4,7 @@ import type { NextRequest } from 'next/server'
 export function middleware(request: NextRequest) {
   const token = request.cookies.get('access_token')?.value
 
-  const privateRoutes = ['/occurrences', '/historic', '/app-occurrences', '/historic-app']
+  const privateRoutes = ['/menu', '/occurrences', '/historic', '/app-occurrences', '/historic-app']
 
   const isAccessingPrivateRoute = privateRoutes.some((route) =>
     request.nextUrl.pathname.startsWith(route),
@@ -17,7 +17,7 @@ export function middleware(request: NextRequest) {
 
 
   if (token && request.nextUrl.pathname.startsWith('/sign-in')) {
-    return NextResponse.redirect(new URL('/occurrences', request.url))
+    return NextResponse.redirect(new URL('/menu', request.url))
   }
 
   return NextResponse.next()
@@ -25,6 +25,7 @@ export function middleware(request: NextRequest) {
 
 export const config = {
   matcher: [
+    '/menu/:path*',
     '/occurrences/:path*',
     '/historic/:path*',
     '/app-occurrences/:path*',

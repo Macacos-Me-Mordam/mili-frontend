@@ -4,11 +4,15 @@ import {
   History,
   LogOutIcon,
   Smartphone,
-  FileClock, // Novo ícone
+  FileClock,
+  Settings,
+  UserPlus,
+  Home, 
+  LayoutDashboard,
+  ChartColumnStacked // O ícone para o Dashboard
 } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-
 import {
   Sidebar,
   SidebarContent,
@@ -24,6 +28,17 @@ import { useEffect, useState } from 'react'
 import { getProfile } from '@/services/auth-service' 
 
 const navItems = [
+  {
+    href: '/menu',
+    icon: Home,
+    label: 'Início',
+  },
+  // Link para o Dashboard está aqui, como deveria
+  {
+    href: '/dashboard',
+    icon: ChartColumnStacked,
+    label: 'Estatísticas',
+  },
   {
     href: '/occurrences',
     icon: Video,
@@ -44,31 +59,35 @@ const navItems = [
     icon: FileClock,
     label: 'Histórico (App)',
   },
-
+  {
+    href: '/settings',
+    icon: Settings,
+    label: 'Configurações',
+  },
   {
     href: '/createUser',
-    icon: History,
+    icon: UserPlus, 
     label: 'Criação de Usuário',
   },
 ]
 
+// O resto do componente não precisa de alterações
 export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname()
   const { user, logout, isLoggingOut } = useAuth()
-
   const [isAdmin, setIsAdmin] = useState(false)
 
   useEffect(() => {
     getProfile()
       .then((profile) => {
-        if (profile.email === 'admin@admin.com') {
+        if (profile.role === 'admin') {
           setIsAdmin(true)
         } else {
           setIsAdmin(false)
         }
       })
       .catch(() => {
-        setIsAdmin(false) 
+        setIsAdmin(false)
       })
   }, [])
 
@@ -82,8 +101,8 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
         <div className="p-2">
           <div className="mb-4 ml-4">
             {user ? (
-              <h1 className="text font-semibold text-white">{user.name}</h1> 
-             ) : (
+              <h1 className="text font-semibold text-white">{user.name}</h1>
+            ) : (
               <Skeleton className="h-6 w-32" />
             )}
           </div>
@@ -92,7 +111,7 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
               <SidebarMenu>
                 {navItems.map((item) => {
                   if (item.label === 'Criação de Usuário' && !isAdmin) {
-                    return null; 
+                    return null
                   }
 
                   return (
