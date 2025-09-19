@@ -6,7 +6,8 @@ import {
   LogOutIcon,
   Smartphone,
   FileClock,
-  Settings, // Novo ícone
+  Settings,
+  LayoutDashboard, // 1. Importar o novo ícone
 } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -25,6 +26,12 @@ import { Skeleton } from '../ui/skeleton'
 
 
 const navItems = [
+  // 2. Adicionar o novo item de menu (sugiro no topo)
+  {
+    href: '/dashboard',
+    icon: LayoutDashboard,
+    label: 'Dashboard',
+  },
   {
     href: '/occurrences',
     icon: Video,
@@ -45,7 +52,6 @@ const navItems = [
     icon: FileClock,
     label: 'Histórico (App)',
   },
-  // Novo item de navegação
   {
     href: '/settings',
     icon: Settings,
