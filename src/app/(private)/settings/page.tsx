@@ -17,21 +17,13 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { AlertTriangle, Loader2, RefreshCw, Bell, Palette, Timer } from 'lucide-react';
+import { AlertTriangle, Loader2, RefreshCw, Palette, Timer } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
 import { Label } from '@/components/ui/label';
 import { Switch } from '@/components/ui/switch';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"; // Precisaremos criar este componente a seguir
 
-// Esquema para o formulário de janela de evidências
 const formSchema = z.object({
   windowSeconds: z.coerce.number()
     .min(1, { message: 'O valor deve ser maior que zero.' })
@@ -40,44 +32,43 @@ const formSchema = z.object({
 
 type SettingsFormValues = z.infer<typeof formSchema>;
 
-
-// Componente para o seletor de tema
+// Componente para o seletor de tema (usa botões; sem dependência de Select)
 function ThemeSelector() {
-    const { theme, setTheme } = useTheme();
+  const { theme, setTheme } = useTheme();
 
-    // NOTA: O componente Select ainda não existe. Vamos adicioná-lo no próximo passo.
-    // Por enquanto, pode comentar esta seção se causar erro, ou criar o arquivo.
-    return (
-        <div className="flex items-center justify-between space-x-2 rounded-lg border p-4">
-             <div className="space-y-0.5">
-                <h3 className="text-base font-semibold">Tema</h3>
-                <p className="text-sm text-muted-foreground">
-                    Selecione o tema para o dashboard.
-                </p>
-            </div>
-            {/* Se o Select não existir, pode substituir por botões temporariamente */}
-            <div className="flex gap-2">
-                <Button variant={theme === 'light' ? 'default' : 'outline'} onClick={() => setTheme('light')}>Claro</Button>
-                <Button variant={theme === 'dark' ? 'default' : 'outline'} onClick={() => setTheme('dark')}>Escuro</Button>
-                <Button variant={theme === 'system' ? 'default' : 'outline'} onClick={() => setTheme('system')}>Sistema</Button>
-            </div>
-        </div>
-    );
+  return (
+    <div className="flex items-center justify-between space-x-2 rounded-lg border p-4">
+      <div className="space-y-0.5">
+        <h3 className="text-base font-semibold">Tema</h3>
+        <p className="text-sm text-muted-foreground">
+          Selecione o tema para o dashboard.
+        </p>
+      </div>
+      <div className="flex gap-2">
+        <Button variant={theme === 'light' ? 'default' : 'outline'} onClick={() => setTheme('light')}>Claro</Button>
+        <Button variant={theme === 'dark' ? 'default' : 'outline'} onClick={() => setTheme('dark')}>Escuro</Button>
+        <Button variant={theme === 'system' ? 'default' : 'outline'} onClick={() => setTheme('system')}>Sistema</Button>
+      </div>
+    </div>
+  );
 }
-
 
 export default function SettingsPage() {
   const queryClient = useQueryClient();
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  const { data, isLoading, isError, error, refetch } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ['settings', 'evidence-window'],
     queryFn: getEvidenceWindow,
   });
 
   const form = useForm<SettingsFormValues>({
     resolver: zodResolver(formSchema),
-    values: { windowSeconds: data?.windowSeconds ?? 60, },
+    values: { windowSeconds: data?.windowSeconds ?? 60 },
+    resetOptions: {
+      keepDirtyValues: true,
+      keepErrors: true,
+    }
   });
 
   const { mutate, isPending } = useMutation({
@@ -93,10 +84,11 @@ export default function SettingsPage() {
   });
 
   const onSubmit = (values: SettingsFormValues) => mutate(values);
-  
+
+  // Esconde a mensagem de sucesso após 3s
   useEffect(() => {
     if (successMessage) {
-      const timer = setTimeout(() => setSuccessMessage(null), 3000); 
+      const timer = setTimeout(() => setSuccessMessage(null), 3000);
       return () => clearTimeout(timer);
     }
   }, [successMessage]);
@@ -105,8 +97,25 @@ export default function SettingsPage() {
     return (
       <div className="p-6 space-y-6">
         <Skeleton className="h-8 w-1/4" />
-        <Skeleton className="h-48 w-full" />
-        <Skeleton className="h-64 w-full" />
+        <Card className="w-full">
+          <CardHeader>
+            <Skeleton className="h-6 w-1/3" />
+            <Skeleton className="h-4 w-2/3" />
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <Skeleton className="h-10 w-40" />
+            <Skeleton className="h-10 w-64" />
+          </CardContent>
+        </Card>
+        <Card className="w-full">
+          <CardHeader>
+            <Skeleton className="h-6 w-1/3" />
+            <Skeleton className="h-4 w-2/3" />
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <Skeleton className="h-10 w-full" />
+          </CardContent>
+        </Card>
       </div>
     );
   }
@@ -129,25 +138,35 @@ export default function SettingsPage() {
           Gira as configurações gerais, de aparência e de notificação do sistema.
         </p>
       </div>
-      
-      {/* Seção de Aparência */}
+
+      {/* Aparência */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
-            <Palette className="h-5 w-5"/> Aparência
+            <Palette className="h-5 w-5" /> Aparência
           </CardTitle>
           <CardDescription>Personalize a aparência do sistema.</CardDescription>
         </CardHeader>
         <CardContent>
-            <ThemeSelector />
+          <ThemeSelector />
         </CardContent>
       </Card>
-      
-      {/* Seção de Configurações Gerais */}
-      <Card>
+
+      {/* Janela de Evidências */}
+      <Card className="w-full max-w-2xl">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Timer className="h-5 w-5" /> Janela de Evidências
+          <CardTitle className="flex items-center justify-between">
+            <span className="flex items-center gap-2">
+              <Timer className="h-5 w-5" /> Janela de Evidências
+            </span>
+            <Button
+              variant="outline"
+              size="icon"
+              disabled={isLoading}
+              aria-label="Atualizar"
+            >
+              <RefreshCw className={isLoading ? 'animate-spin' : ''} />
+            </Button>
           </CardTitle>
           <CardDescription>
             Defina o tempo, em segundos, para agrupar múltiplas evidências de um mesmo evento.
@@ -156,7 +175,7 @@ export default function SettingsPage() {
         <CardContent>
           <Form {...form}>
             <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 max-w-sm">
-            {successMessage && (
+              {successMessage && (
                 <div className="bg-green-500/10 text-green-700 dark:bg-green-500/20 dark:text-green-300 p-3 rounded-md text-sm">
                   {successMessage}
                 </div>
@@ -168,39 +187,31 @@ export default function SettingsPage() {
                   <FormItem>
                     <FormLabel>Tempo em segundos</FormLabel>
                     <FormControl>
-                      <Input type="number" placeholder="Ex: 60" {...field} onChange={(e) => field.onChange(e.target.valueAsNumber)} />
+                      <Input
+                        type="number"
+                        placeholder="Ex: 60"
+                        {...field}
+                        onChange={(e) => field.onChange(e.target.valueAsNumber)}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
               <Button type="submit" disabled={isPending}>
-                {isPending ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> A guardar...</> : 'Guardar Alterações'}
+                {isPending ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    A guardar...
+                  </>
+                ) : (
+                  'Guardar Alterações'
+                )}
               </Button>
             </form>
           </Form>
         </CardContent>
       </Card>
-
-      {/* Seção de Notificações */}
-      <Card>
-          <CardHeader>
-              <CardTitle className="flex items-center gap-2"><Bell className="h-5 w-5"/>Notificações</CardTitle>
-              <CardDescription>Escolha como deseja receber notificações sobre novas ocorrências.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-              <div className="flex items-center justify-between space-x-2 rounded-lg border p-4">
-                   <div className="space-y-0.5">
-                       <Label htmlFor="email-notifications" className="text-base font-semibold">Notificações por E-mail</Label>
-                       <p className="text-sm text-muted-foreground">
-                           Receba um e-mail quando uma nova ocorrência for detetada.
-                       </p>
-                   </div>
-                  <Switch id="email-notifications" />
-              </div>
-          </CardContent>
-      </Card>
-
     </div>
   );
 }

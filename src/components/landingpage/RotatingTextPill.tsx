@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useEffect, useMemo, useRef, useState, useCallback } from "react"
 
 type Props = {
   texts: string[]
@@ -38,7 +38,7 @@ export function RotatingTextPill({
     if (fadeRef.current) clearTimeout(fadeRef.current)
   }
 
-  const schedule = () => {
+  const schedule = useCallback(() => {
     clearTimers()
     fadeRef.current = window.setTimeout(
       () => setVisible(false),
@@ -49,10 +49,10 @@ export function RotatingTextPill({
       setVisible(true)
       schedule()
     }, interval)
-  }
+  },[interval, transitionMs, texts.length]);
 
   // mede a largura da maior frase na FONTE atual do h1
-  const measure = () => {
+  const measure = useCallback(() => {
     const el = wrapperRef.current
     if (!el) return
     const cs = getComputedStyle(el)
@@ -69,13 +69,12 @@ export function RotatingTextPill({
       parseFloat(cs.paddingLeft || "0") + parseFloat(cs.paddingRight || "0")
 
     setMinW(Math.ceil(textWidth + padH))
-  }
+  }, [longestText]);
 
   useEffect(() => {
     schedule()
     return clearTimers
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [schedule])
 
   // pausa no hover
   useEffect(() => {
@@ -89,8 +88,7 @@ export function RotatingTextPill({
       el.removeEventListener("mouseenter", onEnter)
       el.removeEventListener("mouseleave", onLeave)
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pauseOnHover])
+  }, [pauseOnHover, schedule])
 
   // medir ao montar e quando a fonte/tamanho mudar (via ResizeObserver do h1)
   useEffect(() => {
@@ -107,7 +105,7 @@ export function RotatingTextPill({
       ro.disconnect()
       roRef.current = null
     }
-  }, [longestText])
+  }, [longestText, measure])
 
   return (
     // dentro do return:

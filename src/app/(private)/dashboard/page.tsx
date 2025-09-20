@@ -77,7 +77,7 @@ export default function DashboardPage() {
   }, [allCameraOccurrences, allAppOccurrences]);
 
   const handleGenerateReport = () => {
-      let data: ReportableOccurrence[] = [];
+      const data: ReportableOccurrence[] = [];
       if (filters.type === 'all' || filters.type === 'camera') {
           data.push(...allCameraOccurrences);
       }

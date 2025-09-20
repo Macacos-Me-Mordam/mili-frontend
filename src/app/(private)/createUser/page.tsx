@@ -70,7 +70,7 @@ export default function CreateUserPage() {
       await createUser(values);
       setSuccessMessage('Usuário criado com sucesso!');
       form.reset();
-    } catch (error) {
+    } catch {
       setErrorMessage('Falha ao criar usuário. Verifique se o e-mail já existe.');
     }
   };

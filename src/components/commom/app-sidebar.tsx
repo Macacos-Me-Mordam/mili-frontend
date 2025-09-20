@@ -1,3 +1,4 @@
+// src/components/commom/app-sidebar.tsx
 'use client'
 import {
   Video,
@@ -7,9 +8,8 @@ import {
   FileClock,
   Settings,
   UserPlus,
-  Home, 
-  LayoutDashboard,
-  ChartColumnStacked // O ícone para o Dashboard
+  Home,
+  ChartColumnStacked,
 } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -33,7 +33,6 @@ const navItems = [
     icon: Home,
     label: 'Início',
   },
-  // Link para o Dashboard está aqui, como deveria
   {
     href: '/dashboard',
     icon: ChartColumnStacked,
@@ -66,12 +65,11 @@ const navItems = [
   },
   {
     href: '/createUser',
-    icon: UserPlus, 
+    icon: UserPlus,
     label: 'Criação de Usuário',
   },
 ]
 
-// O resto do componente não precisa de alterações
 export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname()
   const { user, logout, isLoggingOut } = useAuth()
@@ -116,7 +114,7 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
 
                   return (
                     <SidebarMenuItem key={item.href}>
-                      <SidebarMenuButton asChild isActive={pathname === item.href} className='text-black'>
+                      <SidebarMenuButton asChild isActive={pathname === item.href} className="text-black">
                         <Link
                           href={item.href}
                           className={`flex items-center gap-2 px-2 py-1.5 rounded-md transition-colors

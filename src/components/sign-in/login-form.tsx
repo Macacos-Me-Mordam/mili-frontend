@@ -40,7 +40,7 @@ export function LoginForm() {
     setErrorMessage(null);
     try {
       await login(values);
-    } catch (error) {
+    } catch {
       setErrorMessage('Email ou palavra-passe incorretos. Tente novamente.');
     }
   };
