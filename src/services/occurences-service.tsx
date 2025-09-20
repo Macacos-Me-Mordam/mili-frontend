@@ -3,7 +3,6 @@ import {
   HistoricOccurrence,
   PendingOccurrence,
   UpdateOccurrenceStatusPayload,
-  Occurrence,
 } from "@/model/interfaces/occurrence-type";
 
 export const getPendingOccurrences = (): Promise<PendingOccurrence[]> => {

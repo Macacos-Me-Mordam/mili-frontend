@@ -17,7 +17,7 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { AlertTriangle, Loader2, RefreshCw, Bell, Palette, Timer } from 'lucide-react';
+import { AlertTriangle, Loader2, RefreshCw, Palette, Timer } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
@@ -57,7 +57,7 @@ export default function SettingsPage() {
   const queryClient = useQueryClient();
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
-  const { data, isLoading, isError, error, refetch } = useQuery({
+  const { data, isLoading, isError, error } = useQuery({
     queryKey: ['settings', 'evidence-window'],
     queryFn: getEvidenceWindow,
   });
@@ -162,7 +162,6 @@ export default function SettingsPage() {
             <Button
               variant="outline"
               size="icon"
-              onClick={() => refetch()}
               disabled={isLoading}
               aria-label="Atualizar"
             >
@@ -211,29 +210,6 @@ export default function SettingsPage() {
               </Button>
             </form>
           </Form>
-        </CardContent>
-      </Card>
-
-      {/* Notificações */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Bell className="h-5 w-5" /> Notificações
-          </CardTitle>
-          <CardDescription>Escolha como deseja receber notificações sobre novas ocorrências.</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center justify-between space-x-2 rounded-lg border p-4">
-            <div className="space-y-0.5">
-              <Label htmlFor="email-notifications" className="text-base font-semibold">
-                Notificações por E-mail
-              </Label>
-              <p className="text-sm text-muted-foreground">
-                Receba um e-mail quando uma nova ocorrência for detetada.
-              </p>
-            </div>
-            <Switch id="email-notifications" />
-          </div>
         </CardContent>
       </Card>
     </div>
