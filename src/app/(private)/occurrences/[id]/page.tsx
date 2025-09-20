@@ -1,3 +1,4 @@
+// src/app/(private)/occurrences/[id]/page.tsx
 'use client'
 
 import { useParams, useRouter } from 'next/navigation'
@@ -11,6 +12,20 @@ import { AlertTriangle, Check, X } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { useMemo } from 'react'
 
+// 1. Importar os componentes de Diálogo
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogClose,
+} from '@/components/ui/dialog'
+
+
+// Componente Skeleton (sem alterações)
 function OccurrenceDetailSkeleton() {
   return (
     <div className="p-6 space-y-6">
@@ -44,13 +59,11 @@ export default function OccurrenceDetailPage() {
   const queryClient = useQueryClient()
   const id = Array.isArray(params.id) ? params.id[0] : params.id
 
-  // 1. Buscamos a lista de todas as ocorrências pendentes
   const { data: occurrences, isLoading, isError, error } = useQuery({
     queryKey: ['processing-occurrences'],
     queryFn: getPendingOccurrences,
   })
 
-  // 2. Encontramos a ocorrência específica na lista usando o ID da URL
   const occurrence = useMemo(() => {
     return occurrences?.find((o) => o.id === id)
   }, [occurrences, id])
@@ -162,14 +175,37 @@ export default function OccurrenceDetailPage() {
           <Check className="mr-2 h-4 w-4" />
           {isUpdatingStatus ? 'Aprovando...' : 'Aprovar'}
         </Button>
-        <Button
-          variant="destructive"
-          onClick={() => updateStatus({ status: 'erro' })}
-          disabled={isUpdatingStatus}
-        >
-          <X className="mr-2 h-4 w-4" />
-          {isUpdatingStatus ? 'Rejeitando...' : 'Rejeitar'}
-        </Button>
+        
+        {/* 2. Envolver o botão "Rejeitar" com o Dialog */}
+        <Dialog>
+          <DialogTrigger asChild>
+            <Button variant="destructive" disabled={isUpdatingStatus}>
+              <X className="mr-2 h-4 w-4" />
+              Rejeitar
+            </Button>
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Confirmar Rejeição</DialogTitle>
+              <DialogDescription>
+                Tem a certeza que deseja rejeitar esta ocorrência? Esta ação não pode ser desfeita.
+              </DialogDescription>
+            </DialogHeader>
+            <DialogFooter>
+              <DialogClose asChild>
+                <Button variant="outline">Cancelar</Button>
+              </DialogClose>
+              <Button
+                variant="destructive"
+                onClick={() => updateStatus({ status: 'erro' })}
+                disabled={isUpdatingStatus}
+              >
+                {isUpdatingStatus ? 'A Rejeitar...' : 'Sim, Rejeitar'}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
+
       </div>
     </div>
   )

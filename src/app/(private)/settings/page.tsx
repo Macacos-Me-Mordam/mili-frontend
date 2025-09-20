@@ -1,3 +1,4 @@
+// src/app/(private)/settings/page.tsx
 'use client'
 
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -16,9 +17,12 @@ import {
   FormMessage,
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
-import { AlertTriangle, Loader2, RefreshCw } from 'lucide-react';
+import { AlertTriangle, Loader2, RefreshCw, Bell, Palette, Timer } from 'lucide-react';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useEffect, useState } from 'react'; // Importar useEffect e useState
+import { useEffect, useState } from 'react';
+import { useTheme } from 'next-themes';
+import { Label } from '@/components/ui/label';
+import { Switch } from '@/components/ui/switch';
 
 const formSchema = z.object({
   windowSeconds: z.coerce.number()
@@ -28,9 +32,30 @@ const formSchema = z.object({
 
 type SettingsFormValues = z.infer<typeof formSchema>;
 
+// Componente para o seletor de tema (usa botões; sem dependência de Select)
+function ThemeSelector() {
+  const { theme, setTheme } = useTheme();
+
+  return (
+    <div className="flex items-center justify-between space-x-2 rounded-lg border p-4">
+      <div className="space-y-0.5">
+        <h3 className="text-base font-semibold">Tema</h3>
+        <p className="text-sm text-muted-foreground">
+          Selecione o tema para o dashboard.
+        </p>
+      </div>
+      <div className="flex gap-2">
+        <Button variant={theme === 'light' ? 'default' : 'outline'} onClick={() => setTheme('light')}>Claro</Button>
+        <Button variant={theme === 'dark' ? 'default' : 'outline'} onClick={() => setTheme('dark')}>Escuro</Button>
+        <Button variant={theme === 'system' ? 'default' : 'outline'} onClick={() => setTheme('system')}>Sistema</Button>
+      </div>
+    </div>
+  );
+}
+
 export default function SettingsPage() {
   const queryClient = useQueryClient();
-  const [successMessage, setSuccessMessage] = useState<string | null>(null); // Novo estado para a mensagem de sucesso
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   const { data, isLoading, isError, error, refetch } = useQuery({
     queryKey: ['settings', 'evidence-window'],
@@ -39,9 +64,7 @@ export default function SettingsPage() {
 
   const form = useForm<SettingsFormValues>({
     resolver: zodResolver(formSchema),
-    values: {
-      windowSeconds: data?.windowSeconds ?? 60,
-    },
+    values: { windowSeconds: data?.windowSeconds ?? 60 },
     resetOptions: {
       keepDirtyValues: true,
       keepErrors: true,
@@ -52,7 +75,7 @@ export default function SettingsPage() {
     mutationFn: updateSetting,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['settings', 'evidence-window'] });
-      setSuccessMessage('Configuração atualizada com sucesso!'); // Definir a mensagem de sucesso
+      setSuccessMessage('Configuração atualizada com sucesso!');
     },
     onError: (err) => {
       console.error("Falha ao atualizar a configuração:", err);
@@ -60,17 +83,13 @@ export default function SettingsPage() {
     }
   });
 
-  const onSubmit = (values: SettingsFormValues) => {
-    mutate(values);
-  };
-  
-  // Efeito para esconder a mensagem de sucesso após 3 segundos
+  const onSubmit = (values: SettingsFormValues) => mutate(values);
+
+  // Esconde a mensagem de sucesso após 3s
   useEffect(() => {
     if (successMessage) {
-      const timer = setTimeout(() => {
-        setSuccessMessage(null);
-      }, 3000); 
-      return () => clearTimeout(timer); // Limpar o timer no unmount
+      const timer = setTimeout(() => setSuccessMessage(null), 3000);
+      return () => clearTimeout(timer);
     }
   }, [successMessage]);
 
@@ -78,14 +97,23 @@ export default function SettingsPage() {
     return (
       <div className="p-6 space-y-6">
         <Skeleton className="h-8 w-1/4" />
-        <Card className="w-full max-w-lg">
+        <Card className="w-full">
           <CardHeader>
-            <Skeleton className="h-6 w-1/2" />
-            <Skeleton className="h-4 w-3/4" />
+            <Skeleton className="h-6 w-1/3" />
+            <Skeleton className="h-4 w-2/3" />
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <Skeleton className="h-10 w-40" />
+            <Skeleton className="h-10 w-64" />
+          </CardContent>
+        </Card>
+        <Card className="w-full">
+          <CardHeader>
+            <Skeleton className="h-6 w-1/3" />
+            <Skeleton className="h-4 w-2/3" />
           </CardHeader>
           <CardContent className="space-y-4">
             <Skeleton className="h-10 w-full" />
-            <Skeleton className="h-10 w-32" />
           </CardContent>
         </Card>
       </div>
@@ -104,16 +132,39 @@ export default function SettingsPage() {
 
   return (
     <div className="p-6 space-y-6">
-      <h1 className="text-xl font-bold tracking-tight">Configurações</h1>
-      <Card className="w-full max-w-lg">
+      <div className="space-y-1">
+        <h1 className="text-2xl font-bold tracking-tight">Configurações</h1>
+        <p className="text-muted-foreground">
+          Gira as configurações gerais, de aparência e de notificação do sistema.
+        </p>
+      </div>
+
+      {/* Aparência */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Palette className="h-5 w-5" /> Aparência
+          </CardTitle>
+          <CardDescription>Personalize a aparência do sistema.</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ThemeSelector />
+        </CardContent>
+      </Card>
+
+      {/* Janela de Evidências */}
+      <Card className="w-full max-w-2xl">
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
-            Janela de Evidências
+            <span className="flex items-center gap-2">
+              <Timer className="h-5 w-5" /> Janela de Evidências
+            </span>
             <Button
               variant="outline"
               size="icon"
               onClick={() => refetch()}
               disabled={isLoading}
+              aria-label="Atualizar"
             >
               <RefreshCw className={isLoading ? 'animate-spin' : ''} />
             </Button>
@@ -124,9 +175,9 @@ export default function SettingsPage() {
         </CardHeader>
         <CardContent>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-            {successMessage && (
-                <div className="bg-green-500/10 text-green-700 dark:bg-green-500/20 dark:text-green-300 p-3 rounded-md">
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4 max-w-sm">
+              {successMessage && (
+                <div className="bg-green-500/10 text-green-700 dark:bg-green-500/20 dark:text-green-300 p-3 rounded-md text-sm">
                   {successMessage}
                 </div>
               )}
@@ -135,7 +186,7 @@ export default function SettingsPage() {
                 name="windowSeconds"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Janela de tempo (em segundos)</FormLabel>
+                    <FormLabel>Tempo em segundos</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
@@ -160,6 +211,29 @@ export default function SettingsPage() {
               </Button>
             </form>
           </Form>
+        </CardContent>
+      </Card>
+
+      {/* Notificações */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Bell className="h-5 w-5" /> Notificações
+          </CardTitle>
+          <CardDescription>Escolha como deseja receber notificações sobre novas ocorrências.</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex items-center justify-between space-x-2 rounded-lg border p-4">
+            <div className="space-y-0.5">
+              <Label htmlFor="email-notifications" className="text-base font-semibold">
+                Notificações por E-mail
+              </Label>
+              <p className="text-sm text-muted-foreground">
+                Receba um e-mail quando uma nova ocorrência for detetada.
+              </p>
+            </div>
+            <Switch id="email-notifications" />
+          </div>
         </CardContent>
       </Card>
     </div>

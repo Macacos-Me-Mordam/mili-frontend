@@ -10,6 +10,7 @@ export const logout = (): Promise<void> => {
   return apiPrivate.post<void>('/auth/logout', {});
 };
 
+//pegar essa fução para validar
 export const getProfile = (): Promise<UserProfile> => {
   return apiPrivate.get<UserProfile>('/users/profile');
 };
