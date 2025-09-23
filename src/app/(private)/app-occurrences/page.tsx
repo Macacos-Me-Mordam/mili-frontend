@@ -12,6 +12,7 @@ function AppOccurrenceCardSkeleton() {
   return (
     <div className="h-52 w-60 p-1">
       <div className="flex flex-col gap-3 p-3">
+
         <Skeleton className="h-4 w-3-4" />
         <Skeleton className="h-4 w-1/2" />
         <Skeleton className="h-4 w-1/3" />
