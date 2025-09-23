@@ -1,4 +1,3 @@
-// src/app/(private)/occurrences/page.tsx
 'use client'
 
 import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card'
@@ -36,7 +35,7 @@ export default function OccurrencesPage() {
   const renderContent = () => {
     if (isLoading) {
       return (
-        <div className="grid gap-4 auto-cols-fr justify-center [grid-template-columns:repeat(auto-fit,minmax(240px,1fr))]">
+        <div className="flex flex-wrap justify-start gap-6">
           {Array.from({ length: 6 }).map((_, index) => (
             <OccurrenceCardSkeleton key={index} />
           ))}
@@ -59,7 +58,7 @@ export default function OccurrencesPage() {
     }
 
     return (
-      <div className="grid gap-4 auto-cols-fr justify-center [grid-template-columns:repeat(auto-fit,minmax(240px,1fr))]">
+      <div className="flex flex-wrap justify-start gap-6">
         {occurrences.map((occurrence) => {
           const firstEvidence = occurrence.evidences?.[0];
 

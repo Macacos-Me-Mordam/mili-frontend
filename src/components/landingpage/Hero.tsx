@@ -1,6 +1,5 @@
 import { RotatingTextPill } from "@/components/landingpage/RotatingTextPill"
-import { FaUser } from 'react-icons/fa'; 
-import Link from 'next/link'
+
 
 export function Hero() {
   return (
@@ -27,7 +26,7 @@ export function Hero() {
             <span className="inline-flex flex-nowrap items-baseline whitespace-nowrap gap-2">
               para um
               <RotatingTextPill
-                texts={["Mundo mais limpo", "Planeta sustentável", "Futuro verde"]}
+                texts={["Futuro verde", "Mundo melhor", "Ambiente são"]}
                 interval={2400}
                 transitionMs={600}
                 pillClassName="px-4 py-1 bg-sky-600/90 rounded-2xl shadow-inner"
@@ -51,12 +50,7 @@ export function Hero() {
           </div>
 
           {}
-          <div className="absolute top-0 right-4 z-20 transform -translate-y-7 flex items-center space-x-2">
-            <Link href="/sign-in" className="bg-sky-600 text-white p-3 rounded-full shadow-lg flex items-center space-x-2">
-              <FaUser size={20} />
-              <span className="text-sm">Login</span>
-            </Link>
-          </div>
+          
         </div>
       </div>
     </section>

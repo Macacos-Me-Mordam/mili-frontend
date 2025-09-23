@@ -1,4 +1,3 @@
-// src/app/(private)/app-occurrences/page.tsx
 'use client'
 
 import { Card, CardContent, CardDescription, CardTitle } from '@/components/ui/card'
@@ -13,7 +12,8 @@ function AppOccurrenceCardSkeleton() {
   return (
     <div className="h-52 w-60 p-1">
       <div className="flex flex-col gap-3 p-3">
-        <Skeleton className="h-4 w-3/4" />
+
+        <Skeleton className="h-4 w-3-4" />
         <Skeleton className="h-4 w-1/2" />
         <Skeleton className="h-4 w-1/3" />
         <Skeleton className="h-6 w-24 mt-1" />
@@ -36,7 +36,7 @@ export default function AppOccurrencesPage() {
   const renderContent = () => {
     if (isLoading) {
       return (
-        <div className="grid gap-4 auto-cols-fr justify-center [grid-template-columns:repeat(auto-fit,minmax(240px,1fr))]">
+        <div className="flex flex-wrap justify-start gap-6">
           {Array.from({ length: 6 }).map((_, index) => (
             <AppOccurrenceCardSkeleton key={index} />
           ))}
@@ -59,7 +59,7 @@ export default function AppOccurrencesPage() {
     }
 
     return (
-      <div className="grid gap-4 auto-cols-fr justify-center [grid-template-columns:repeat(auto-fit,minmax(240px,1fr))]">
+      <div className="flex flex-wrap justify-start gap-6">
         {occurrences.map((occurrence) => (
           <Link key={occurrence.id} href={`/app-occurrences/${occurrence.id}`} passHref>
             <Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer h-52 w-60 flex flex-col p-0">
