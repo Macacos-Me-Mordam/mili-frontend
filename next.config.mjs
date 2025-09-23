@@ -10,7 +10,7 @@ const nextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'exemplo.com', // Domínio do erro
+        hostname: 'mili-fetin.s3.us-east-1.amazonaws.com',
         port: '',
         pathname: '/**',
       },

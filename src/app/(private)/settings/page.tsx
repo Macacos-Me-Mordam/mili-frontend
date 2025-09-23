@@ -21,8 +21,6 @@ import { AlertTriangle, Loader2, RefreshCw, Palette, Timer } from 'lucide-react'
 import { Skeleton } from '@/components/ui/skeleton';
 import { useEffect, useState } from 'react';
 import { useTheme } from 'next-themes';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
 
 const formSchema = z.object({
   windowSeconds: z.coerce.number()

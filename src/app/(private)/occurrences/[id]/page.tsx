@@ -1,4 +1,3 @@
-// src/app/(private)/occurrences/[id]/page.tsx
 'use client'
 
 import { useParams, useRouter } from 'next/navigation'
@@ -12,7 +11,6 @@ import { AlertTriangle, Check, X } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { useMemo } from 'react'
 
-// 1. Importar os componentes de Diálogo
 import {
   Dialog,
   DialogContent,
@@ -24,8 +22,6 @@ import {
   DialogClose,
 } from '@/components/ui/dialog'
 
-
-// Componente Skeleton (sem alterações)
 function OccurrenceDetailSkeleton() {
   return (
     <div className="p-6 space-y-6">
@@ -148,17 +144,37 @@ export default function OccurrenceDetailPage() {
         <CardContent>
           {occurrence.evidences && occurrence.evidences.length > 0 ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-              {occurrence.evidences.map((evidence) => (
-                <div key={evidence.id} className="relative aspect-square w-full">
-                  <Image
-                    src={evidence.filePath || 'https://picsum.photos/200'}
-                    alt="Evidência da ocorrência"
-                    layout="fill"
-                    objectFit="cover"
-                    className="rounded-md"
-                  />
-                </div>
-              ))}
+              {occurrence.evidences.map((evidence) => {
+                const filePath = evidence.filePath || 'https://picsum.photos/200';
+                const isVideo = filePath.toLowerCase().endsWith('.mp4');
+
+                return (
+                  <div key={evidence.id} className="relative aspect-square w-full overflow-hidden rounded-md bg-muted">
+                    {isVideo ? (
+                      <video
+                        src={filePath}
+                        controls
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        crossOrigin="anonymous"
+                        className="absolute inset-0 h-full w-full object-cover"
+                      >
+                        Seu navegador não suporta o elemento de vídeo.
+                      </video>
+                    ) : (
+                      <Image
+                        src={filePath}
+                        alt="Evidência da ocorrência"
+                        layout="fill"
+                        objectFit="cover"
+                        className="rounded-md"
+                      />
+                    )}
+                  </div>
+                );
+              })}
             </div>
           ) : (
             <p className="text-muted-foreground">Nenhuma evidência encontrada.</p>
@@ -176,7 +192,6 @@ export default function OccurrenceDetailPage() {
           {isUpdatingStatus ? 'Aprovando...' : 'Aprovar'}
         </Button>
         
-        {/* 2. Envolver o botão "Rejeitar" com o Dialog */}
         <Dialog>
           <DialogTrigger asChild>
             <Button variant="destructive" disabled={isUpdatingStatus}>
