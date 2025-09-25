@@ -1,5 +1,6 @@
 // Interface única e correta para Evidências (camelCase)
 export interface Evidence {
+  videoUrl: any;
   id: string;
   filePath: string;
   createdAt: string;

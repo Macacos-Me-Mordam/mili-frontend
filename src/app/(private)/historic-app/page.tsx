@@ -1,4 +1,3 @@
-// O código para esta página permanece o mesmo, pois o espaçamento já é consistente.
 'use client'
 
 import '@/app/globals.css'
@@ -172,28 +171,32 @@ export default function HistoricOfApp() {
 
     const filteredSuccessful = useMemo(() => {
         if (!successfulOccurrences) return [];
-        return successfulOccurrences.filter(occurrence => {
-            const occurrenceDate = new Date(occurrence.createdAt);
-            const start = startDate ? new Date(startDate) : null;
-            const end = endDate ? new Date(endDate) : null;
+        return successfulOccurrences
+            .filter(occurrence => {
+                const occurrenceDate = new Date(occurrence.createdAt);
+                const start = startDate ? new Date(startDate) : null;
+                const end = endDate ? new Date(endDate) : null;
 
-            if (start && occurrenceDate < start) return false;
-            if (end && occurrenceDate > end) return false;
-            return true;
-        });
+                if (start && occurrenceDate < start) return false;
+                if (end && occurrenceDate > end) return false;
+                return true;
+            })
+            .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()); // ordenação
     }, [successfulOccurrences, startDate, endDate]);
 
     const filteredFailed = useMemo(() => {
         if (!failedOccurrences) return [];
-        return failedOccurrences.filter(occurrence => {
-            const occurrenceDate = new Date(occurrence.createdAt);
-            const start = startDate ? new Date(startDate) : null;
-            const end = endDate ? new Date(endDate) : null;
+        return failedOccurrences
+            .filter(occurrence => {
+                const occurrenceDate = new Date(occurrence.createdAt);
+                const start = startDate ? new Date(startDate) : null;
+                const end = endDate ? new Date(endDate) : null;
 
-            if (start && occurrenceDate < start) return false;
-            if (end && occurrenceDate > end) return false;
-            return true;
-        });
+                if (start && occurrenceDate < start) return false;
+                if (end && occurrenceDate > end) return false;
+                return true;
+            })
+            .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()); // ordenação
     }, [failedOccurrences, startDate, endDate]);
 
     return (

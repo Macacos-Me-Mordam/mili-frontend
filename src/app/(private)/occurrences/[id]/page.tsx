@@ -5,7 +5,6 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { getPendingOccurrences, updateOccurrenceStatus } from '@/services/occurences-service'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
-import Image from 'next/image'
 import { Skeleton } from '@/components/ui/skeleton'
 import { AlertTriangle, Check, X } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
@@ -100,7 +99,7 @@ export default function OccurrenceDetailPage() {
         <AlertTriangle className="w-16 h-16 text-yellow-500 mb-4" />
         <h2 className="text-2xl font-bold">Ocorrência não encontrada</h2>
         <p className="text-muted-foreground">Não foi possível encontrar os detalhes para esta ocorrência.</p>
-         <Button onClick={() => router.push('/occurrences')} className="mt-4">Voltar</Button>
+        <Button onClick={() => router.push('/occurrences')} className="mt-4">Voltar</Button>
       </div>
     )
   }
@@ -137,47 +136,33 @@ export default function OccurrenceDetailPage() {
         </CardContent>
       </Card>
 
-      <Card>
+          <Card>
         <CardHeader>
           <CardTitle>Evidências</CardTitle>
         </CardHeader>
         <CardContent>
-          {occurrence.evidences && occurrence.evidences.length > 0 ? (
+          {occurrence.evidences && occurrence.evidences.filter((e) => e.filePath?.toLowerCase().includes('.mp4')).length > 0 ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
-              {occurrence.evidences.map((evidence) => {
-                const filePath = evidence.filePath || 'https://picsum.photos/200';
-                const isVideo = filePath.toLowerCase().endsWith('.mp4');
-
-                return (
-                  <div key={evidence.id} className="relative aspect-square w-full overflow-hidden rounded-md bg-muted">
-                    {isVideo ? (
-                      <video
-                        src={filePath}
-                        controls
-                        autoPlay
-                        loop
-                        muted
-                        playsInline
-                        crossOrigin="anonymous"
-                        className="absolute inset-0 h-full w-full object-cover"
-                      >
-                        Seu navegador não suporta o elemento de vídeo.
-                      </video>
-                    ) : (
-                      <Image
-                        src={filePath}
-                        alt="Evidência da ocorrência"
-                        layout="fill"
-                        objectFit="cover"
-                        className="rounded-md"
-                      />
-                    )}
+              {occurrence.evidences
+                .filter((evidence) => evidence.filePath?.toLowerCase().includes('.mp4'))
+                .map((evidence) => (
+                  <div
+                    key={evidence.id}
+                    className="relative aspect-square w-full overflow-hidden rounded-md bg-muted"
+                  >
+                    <video
+                      src={evidence.filePath}
+                      controls
+                      playsInline
+                      className="absolute inset-0 h-full w-full object-cover"
+                    >
+                      Seu navegador não suporta o elemento de vídeo.
+                    </video>
                   </div>
-                );
-              })}
+                ))}
             </div>
           ) : (
-            <p className="text-muted-foreground">Nenhuma evidência encontrada.</p>
+            <p className="text-muted-foreground">Nenhum vídeo encontrado.</p>
           )}
         </CardContent>
       </Card>

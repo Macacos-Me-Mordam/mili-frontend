@@ -12,7 +12,6 @@ function AppOccurrenceCardSkeleton() {
   return (
     <div className="h-52 w-60 p-1">
       <div className="flex flex-col gap-3 p-3">
-
         <Skeleton className="h-4 w-3-4" />
         <Skeleton className="h-4 w-1/2" />
         <Skeleton className="h-4 w-1/3" />
@@ -58,11 +57,16 @@ export default function AppOccurrencesPage() {
       return <p className="text-sm text-muted-foreground px-4">Nenhuma ocorrência pendente encontrada.</p>
     }
 
+    // ordena do mais recente para o mais antigo
+    const sortedOccurrences = [...occurrences].sort(
+      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    )
+
     return (
       <div className="flex flex-wrap justify-start gap-6">
-        {occurrences.map((occurrence) => (
+        {sortedOccurrences.map((occurrence) => (
           <Link key={occurrence.id} href={`/app-occurrences/${occurrence.id}`} passHref>
-            <Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer h-52 w-60 flex flex-col p-0">
+            <Card className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer h-55 w-60 flex flex-col p-0">
               <CardContent className="flex flex-col justify-between flex-1 gap-2 p-3">
                 <div>
                   <CardDescription className="text-xs text-muted-foreground mb-0.5">

@@ -52,7 +52,7 @@ export default function AppOccurrenceDetailPage() {
   const { mutate: updateStatus, isPending: isUpdatingStatus } = useMutation({
     mutationFn: ({ status }: { status: 'resolved' | 'closed' }) => {
       if (!id) throw new Error('ID da ocorrência não encontrado');
-      return updateAppOccurrenceStatus({id, status});
+      return updateAppOccurrenceStatus({ id, status });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['processing-app-occurrences'] })
@@ -85,7 +85,7 @@ export default function AppOccurrenceDetailPage() {
         <AlertTriangle className="w-16 h-16 text-yellow-500 mb-4" />
         <h2 className="text-2xl font-bold">Ocorrência não encontrada</h2>
         <p className="text-muted-foreground">Não foi possível encontrar os detalhes para esta ocorrência.</p>
-         <Button onClick={() => router.push('/app-occurrences')} className="mt-4">Voltar</Button>
+        <Button onClick={() => router.push('/app-occurrences')} className="mt-4">Voltar</Button>
       </div>
     )
   }
@@ -136,9 +136,8 @@ export default function AppOccurrenceDetailPage() {
               <Image
                 src={occurrence.photoUrl}
                 alt="Foto da ocorrência"
-                layout="fill"
-                objectFit="contain"
-                className="rounded-md"
+                fill
+                className="object-contain rounded-md"
               />
             </div>
           ) : (
