@@ -2,9 +2,9 @@ import AnimatedNumber from "@/components/landingpage/AnimatedNumber";
 
 export function Stats() {
   const stats = [
-    { label: "Pontos monitorados", value: "+120" },
+    { label: "Imagens utilizadas no treinamento", value: "+10000" },
     { label: "Redução de descarte", value: "-35%" },
-    { label: "Precisão da IA", value: "98.7%" },
+    { label: "Precisão da IA", value: "90.0%" },
   ];
 
   return (
