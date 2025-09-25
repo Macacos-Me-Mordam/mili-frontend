@@ -29,12 +29,6 @@ import { useEffect, useState } from 'react'
 import { getProfile } from '@/services/auth-service' 
 
 const navItems = [
-  // 2. Adicionar o novo item de menu (sugiro no topo)
-  {
-    href: '/dashboard',
-    icon: LayoutDashboard,
-    label: 'Dashboard',
-  },
   {
     href: '/menu',
     icon: Home,

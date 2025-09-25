@@ -57,15 +57,20 @@ export default function OccurrencesPage() {
       return <p className="text-sm text-muted-foreground px-4">Nenhuma ocorrência pendente encontrada.</p>
     }
 
+    // ordena do mais recente para o mais antigo
+    const sortedOccurrences = [...occurrences].sort(
+      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    )
+
     return (
       <div className="flex flex-wrap justify-start gap-6">
-        {occurrences.map((occurrence) => {
+        {sortedOccurrences.map((occurrence) => {
           const firstEvidence = occurrence.evidences?.[0];
 
           return (
             <Link key={occurrence.id} href={`/occurrences/${occurrence.id}`} passHref>
               <Card
-                className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer h-52 w-60 flex flex-col p-0"
+                className="overflow-hidden hover:shadow-lg transition-shadow cursor-pointer h-55 w-60 flex flex-col p-0"
               >
                 <CardContent className="flex flex-col justify-between flex-1 p-3 gap-2">
                     <div>
