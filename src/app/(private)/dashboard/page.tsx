@@ -167,8 +167,8 @@ export default function DashboardPage() {
       {/* TODA A SEÇÃO DE GRÁFICOS ESTÁ AQUI */}
       <div className="space-y-6">
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-              <KpiCard title="Total Ocorrências (Câmeras)" value={allCameraOccurrences.length} description="Total de eventos gerados pela IA." />
-              <KpiCard title="Total Ocorrências (App)" value={allAppOccurrences.length} description="Total de reportes de usuários." />
+              <KpiCard title="Total Ocorrências analisadas (Câmeras)" value={allCameraOccurrences.length} description="Total de eventos gerados pela IA." />
+              <KpiCard title="Total Ocorrências analisadas (App)" value={allAppOccurrences.length} description="Total de reportes de usuários." />
               <KpiCard title="Ocorrências Resolvidas" value={statusDistribution[0].value} description="Casos concluídos com sucesso." />
               <KpiCard title="Ocorrências Fechadas" value={statusDistribution[1].value} description="Casos descartados ou falsos positivos." />
           </div>
