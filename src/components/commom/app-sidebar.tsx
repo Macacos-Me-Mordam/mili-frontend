@@ -10,7 +10,6 @@ import {
   UserPlus,
   Home,
   ChartColumnStacked,
-  LayoutDashboard, // 1. Importar o novo ícone
 } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
